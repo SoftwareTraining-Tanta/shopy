@@ -24,21 +24,21 @@ namespace Models
         public int Id { get; set; }
         [Required]
         [Column("name")]
-        [StringLength(30)]
+        [StringLength(30, ErrorMessage = "Name Can't be more than 30 character length")]
         public string Name { get; set; }
         [Column("country")]
-        [StringLength(30)]
+        [StringLength(30, ErrorMessage = "Country Can't be more than 30 character length")]
         public string Country { get; set; }
         [Column("city")]
-        [StringLength(30)]
+        [StringLength(30, ErrorMessage = "City Can't be more than 30 character length")]
         public string City { get; set; }
         [Required]
         [Column("phone")]
-        [StringLength(20)]
+        [StringLength(20, ErrorMessage = "Phone number Can't be more than 20 character length")]
         public string Phone { get; set; }
         [Required]
         [Column("email")]
-        [StringLength(60)]
+        [StringLength(60, ErrorMessage = "Email Can't be more than 60 character length")]
         public string Email { get; set; }
         [Required]
         [Column("password")]
