@@ -1,8 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+
 #nullable disable
 
 namespace Models
@@ -73,7 +76,7 @@ namespace Models
                 {
                     if (isFound)
                     {
-                        Client client = db.Clients.Where(client => client.Id == id).First();
+                        Client client = db.Clients.Where(client => client.Id == id).FirstOrDefault();
                         return client;
                     }
                     return MyExceptions.ClientNotFound(id);
@@ -89,38 +92,31 @@ namespace Models
         {
             using (Shopy db = new())
             {
-                try
-                {
-                    Client client = db.Clients.Where(client => client.Id == id).First();
-                    return true;
-                }
-                catch
-                {
-                    return false;
-                }
+                Client client = db.Clients.Where(client => client.Id == id).FirstOrDefault();
+                return client != null;
             }
         }
         public static dynamic Delete(int id)
         {
             bool isFound = Check(id);
+            if (!isFound)
+                return MyExceptions.ClientNotFound(id);
             using (Shopy db = new())
             {
-                if (isFound)
-                {
-                    Client client = db.Clients.Where(client => client.Id == id).First();
-                    db.Clients.Remove(client);
-                    db.SaveChanges();
-                    return client;
-                }
-                return MyExceptions.ClientNotFound(id);
+                Client client = db.Clients.Where(client => client.Id == id).FirstOrDefault();
+                db.Clients.Remove(client);
+                db.SaveChanges();
+                return client;
             }
         }
-        public static void Update(int id, dynamic value, Properities properities = Properities.Name)
+        public static string Update(int id, dynamic value, Properities properities = Properities.Name)
         {
 
+            bool isFound = Check(id);
+            if (!isFound) return MyExceptions.ClientNotFound(id);
             using (Shopy db = new())
             {
-                Client client = db.Clients.Where(c => c.Id == id).First();
+                Client client = db.Clients.Where(c => c.Id == id).FirstOrDefault();
                 switch (properities)
                 {
                     case Properities.Name:
@@ -138,11 +134,35 @@ namespace Models
                     case Properities.Phone:
                         client.Phone = value;
                         break;
+                    case Properities.Password:
+                        client.Password = value;
+                        break;
                     default:
                         client.Name = value;
                         break;
                 }
                 db.SaveChanges();
+                return "Updating done";
+            }
+        }
+        public static List<Client> AllClients()
+        {
+            using (Shopy db = new())
+            {
+                List<Client> clients = db.Clients.DefaultIfEmpty().ToList();
+                return clients;
+            }
+        }
+        public static List<Product> ClientProducts(int id)
+        {
+            using (Shopy db = new())
+            {
+                Client client = db.Clients
+                .Where(client => client.Id == id)
+                .Include(client => client.Products)
+                .FirstOrDefault();
+                List<Product> products = client.Products.ToList();
+                return products;
             }
         }
     }
