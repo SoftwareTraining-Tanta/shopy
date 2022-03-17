@@ -7,7 +7,7 @@ using System.Linq;
 
 #nullable disable
 
-namespace Models
+namespace Shopy.Models
 {
     [Table("products")]
     [Index(nameof(CartId), Name = "cartId")]
@@ -57,7 +57,7 @@ namespace Models
         {
             bool isFound = Exist(id);
             if (!isFound) return MyExceptions.ProductNotFound(id);
-            using (Shopy db = new())
+            using (ShopyCtx db = new())
             {
                 Product product = db.Products.Where(p => p.Id == id).FirstOrDefault();
                 switch (properities)
@@ -89,15 +89,51 @@ namespace Models
             }
         }
 
+        public static dynamic Get(int productId)
+        {
+            bool isFound = Exist(productId);
+            if (!isFound)
+            {
+                return MyExceptions.ProductNotFound(productId);
+            }
+            using (ShopyCtx db = new())
+            {
+                return db.Products.Where(p => p.Id == productId).FirstOrDefault();
+            }
+
+        }
+
         private static bool Exist(int id)
         {
-            using (Shopy db = new())
+            using (ShopyCtx db = new())
             {
                 Product product = db.Products.Where(p => p.Id == id).FirstOrDefault();
                 return product != null;
             }
         }
 
+        public static string Add(Product product)
+        {
+            using (ShopyCtx db = new())
+            {
+                var getProduct = db.Products.Where(v => v.Equals(product)).FirstOrDefault();
+                if (getProduct != null)
+                {
+                    return "Client already exists";
+                }
+                db.Products.Add(product);
+                db.SaveChanges();
+                return "Done adding client";
+            }
+        }
+
+        public List<Product> AvailableProducts()
+        {
+            using (ShopyCtx db = new())
+            {
+                return db.Products.Where(p => p.ClientId == 1).ToList();
+            }
+        }
     }
 
 }
