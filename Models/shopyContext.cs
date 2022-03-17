@@ -1,18 +1,18 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace Models
+namespace Shopy.Models
 {
-    public partial class shopyContext : DbContext
+    public partial class ShopyCtx : DbContext
     {
-        public shopyContext()
+        public ShopyCtx()
         {
         }
 
-        public shopyContext(DbContextOptions<shopyContext> options)
+        public ShopyCtx(DbContextOptions<ShopyCtx> options)
             : base(options)
         {
         }
@@ -27,7 +27,7 @@ namespace Models
             if (!optionsBuilder.IsConfigured)
             {
 //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseMySQL("server=localhost;database=shopy;user=root;password=2510203121");
+                optionsBuilder.UseMySQL("server=localhost;database=shopy;user=root;password=root");
             }
         }
 
@@ -38,7 +38,7 @@ namespace Models
                 entity.HasOne(d => d.Client)
                     .WithMany(p => p.Carts)
                     .HasForeignKey(d => d.ClientId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("carts_ibfk_1");
             });
 
