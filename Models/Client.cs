@@ -5,7 +5,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.Logging;
+using Models.shared;
 #nullable disable
 
 namespace Models
@@ -49,46 +51,52 @@ namespace Models
         public virtual ICollection<Cart> Carts { get; set; }
         [InverseProperty(nameof(Product.Client))]
         public virtual ICollection<Product> Products { get; set; }
+
+
         public enum Properities { Name, Id, Email, Phone, City, Country, Password };
         public static string Add(Client client)
         {
 
             using (Shopy db = new())
             {
-                try
+                ILoggerFactory loggerFactory = db.GetService<ILoggerFactory>();
+                loggerFactory.AddProvider(new ConsoleLoggerProvider());
+
+                var getClient = db.Clients.Where(cl => cl.Equals(client)).FirstOrDefault();
+                if (getClient != null)
                 {
-                    db.Clients.Add(client);
-                    db.SaveChanges();
-                    return "Done adding client";
+                    return "Client already exists";
                 }
-                catch
-                {
-                    return "Client is already inserted";
-                }
+
+                db.Clients.Add(client);
+                client.Carts.Add(
+                    new Cart()
+                    {
+                        ClientId = client.Id,
+                        Country = client.Country,
+                        City = client.City,
+                        Phone = client.Phone,
+                        Email = client.Email
+                    }
+                );
+                db.SaveChanges();
+                return "Done adding client";
             }
         }
         public static dynamic Get(int id)
         {
-            bool isFound = Check(id);
+            bool isFound = Exist(id);
+            if (!isFound)
+            {
+                return MyExceptions.ClientNotFound(id);
+            }
             using (Shopy db = new())
             {
-                try
-                {
-                    if (isFound)
-                    {
-                        Client client = db.Clients.Where(client => client.Id == id).FirstOrDefault();
-                        return client;
-                    }
-                    return MyExceptions.ClientNotFound(id);
-                }
-                catch (Exception ex)
-                {
-                    return ex.Message;
-                }
+                return db.Clients.Where(client => client.Id == id).FirstOrDefault();
             }
 
         }
-        private static bool Check(int id)
+        private static bool Exist(int id)
         {
             using (Shopy db = new())
             {
@@ -98,7 +106,7 @@ namespace Models
         }
         public static dynamic Delete(int id)
         {
-            bool isFound = Check(id);
+            bool isFound = Exist(id);
             if (!isFound)
                 return MyExceptions.ClientNotFound(id);
             using (Shopy db = new())
@@ -106,13 +114,12 @@ namespace Models
                 Client client = db.Clients.Where(client => client.Id == id).FirstOrDefault();
                 db.Clients.Remove(client);
                 db.SaveChanges();
-                return client;
+                return "Client Deleted";
             }
         }
         public static string Update(int id, dynamic value, Properities properities = Properities.Name)
         {
-
-            bool isFound = Check(id);
+            bool isFound = Exist(id);
             if (!isFound) return MyExceptions.ClientNotFound(id);
             using (Shopy db = new())
             {
@@ -142,7 +149,7 @@ namespace Models
                         break;
                 }
                 db.SaveChanges();
-                return "Updating done";
+                return "Updated";
             }
         }
         public static List<Client> AllClients()
@@ -157,13 +164,14 @@ namespace Models
         {
             using (Shopy db = new())
             {
-                Client client = db.Clients
-                .Where(client => client.Id == id)
-                .Include(client => client.Products)
-                .FirstOrDefault();
-                List<Product> products = client.Products.ToList();
-                return products;
+                // ILoggerFactory loggerFactory = db.GetService<ILoggerFactory>();
+                // loggerFactory.AddProvider(new ConsoleLoggerProvider());
+
+                // if the product is in the cart, It will not be in this list.
+                Client client = Get(id);
+                return client.Products.Where(p => p.CartId == null).ToList();
             }
         }
+        
     }
 }
