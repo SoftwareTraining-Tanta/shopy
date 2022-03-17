@@ -41,7 +41,7 @@ create table products
 (
     id        int auto_increment,
     vendorId  int           not null,
-    clientId  int           not null,
+    clientId  int
     category  varchar(20)   not null check (category in
                                             ('Ram', 'Monitor', 'SSD', 'HDD', 'K&M', 'Laptop', 'FlashDrive')),
     model     varchar(30),
