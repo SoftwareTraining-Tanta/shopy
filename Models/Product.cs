@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 #nullable disable
 
@@ -17,6 +18,7 @@ namespace Models
         [Key]
         [Column("id")]
         public int Id { get; set; }
+        [Required]
         [Column("vendorId")]
         public int VendorId { get; set; }
         [Column("clientId")]
@@ -48,5 +50,54 @@ namespace Models
         [ForeignKey(nameof(VendorId))]
         [InverseProperty("Products")]
         public virtual Vendor Vendor { get; set; }
+
+        public enum Properities { ClientId, Category, Model, Price, Details, ImagePath, CartId };
+
+        public static string Update(int id, dynamic value, Properities properities)
+        {
+            bool isFound = Exist(id);
+            if (!isFound) return MyExceptions.ProductNotFound(id);
+            using (Shopy db = new())
+            {
+                Product product = db.Products.Where(p => p.Id == id).FirstOrDefault();
+                switch (properities)
+                {
+                    case Properities.ClientId:
+                        product.ClientId = value;
+                        break;
+                    case Properities.Category:
+                        product.Category = value;
+                        break;
+                    case Properities.Model:
+                        product.Model = value;
+                        break;
+                    case Properities.Price:
+                        product.Price = value;
+                        break;
+                    case Properities.Details:
+                        product.Details = value;
+                        break;
+                    case Properities.ImagePath:
+                        product.ImagePath = value;
+                        break;
+                    case Properities.CartId:
+                        product.CartId = value;
+                        break;
+                }
+                db.SaveChanges();
+                return "Updated";
+            }
+        }
+
+        private static bool Exist(int id)
+        {
+            using (Shopy db = new())
+            {
+                Product product = db.Products.Where(p => p.Id == id).FirstOrDefault();
+                return product != null;
+            }
+        }
+
     }
+
 }
