@@ -7,10 +7,10 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Logging;
-using Models.shared;
+using Shopy.Models.shared;
 #nullable disable
 
-namespace Models
+namespace Shopy.Models
 {
     [Table("carts")]
     [Index(nameof(ClientId), Name = "clientId")]
@@ -55,7 +55,7 @@ namespace Models
         {
             bool isFound = Exist(id);
             if (!isFound) return MyExceptions.CartNotFound(id);
-            using (Shopy db = new())
+            using (ShopyCtx db = new())
             {
                 Cart cart = db.Carts.Where(c => c.Id == id).FirstOrDefault();
                 switch (properities)
@@ -80,7 +80,7 @@ namespace Models
 
         private static bool Exist(int CurtId)
         {
-            using (Shopy db = new())
+            using (ShopyCtx db = new())
             {
                 Cart cart = db.Carts.Where(c => c.Id == CurtId).FirstOrDefault();
                 return cart != null;
@@ -93,14 +93,27 @@ namespace Models
             {
                 return MyExceptions.CartNotFound(CartId);
             }
-            using (Shopy db = new())
+            using (ShopyCtx db = new())
             {
                 return db.Carts.Where(cart => cart.Id == CartId).FirstOrDefault();
             }
         }
+        public static dynamic Delete(int CartId)
+        {
+            bool isFound = Exist(CartId);
+            if (!isFound)
+                return MyExceptions.CartNotFound(CartId);
+            using (ShopyCtx db = new())
+            {
+                Cart cart = db.Carts.Where(client => client.Id == CartId).FirstOrDefault();
+                db.Carts.Remove(cart);
+                db.SaveChanges();
+                return "Client Deleted";
+            }
+        }
         public static string AddToCart(int ClientId, int ProductId) // added by Harby at 12:00 PM
         {
-            using (Shopy db = new())
+            using (ShopyCtx db = new())
             {
                 var cartId = db.Carts.Where(c => c.ClientId.Equals(ClientId)).FirstOrDefault();
                 Product.Update(ProductId, ClientId, Product.Properities.ClientId);
@@ -110,24 +123,24 @@ namespace Models
         }
         public static string RemoveFromCart(int ProductId)
         {
-            using (Shopy db = new())
+            using (ShopyCtx db = new())
             {
-                Product.Update(ProductId, null, Product.Properities.ClientId);
-                Product.Update(ProductId, null, Product.Properities.CartId);
+                Product.Update(ProductId, 3, Product.Properities.ClientId);
+                Product.Update(ProductId, 1, Product.Properities.CartId);
                 return "Item is remove from cart";
             }
         }
         public static string CheckOut(int clientId, int productId)
         {
-            using (Shopy db = new())
+            using (ShopyCtx db = new())
             {
-                Product.Update(productId, null, Product.Properities.CartId);
+                Product.Update(productId, 1, Product.Properities.CartId);
                 return "successful Transactions";
             }
         }
         public static List<Product> InCart(int cartId)
         {
-            using (Shopy db = new())
+            using (ShopyCtx db = new())
             {
                 Cart cart = Get(cartId);
                 return cart.Products.ToList();
@@ -135,7 +148,7 @@ namespace Models
         }
         public static int CountInCart(int cartId)
         {
-            using (Shopy db = new())
+            using (ShopyCtx db = new())
             {
                 Cart cart = Get(cartId);
                 return cart.Products.Count();
