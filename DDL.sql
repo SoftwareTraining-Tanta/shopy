@@ -34,7 +34,7 @@ create table carts
     phone    varchar(20) not null,
     email    varchar(60) not null,
     primary key (id),
-    foreign key (clientId) references clients (id)
+    foreign key (clientId) references clients (id) on delete cascade
 );
 
 create table products
