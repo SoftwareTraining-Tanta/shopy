@@ -49,28 +49,28 @@ namespace Shopy.Models
         [InverseProperty(nameof(Product.Cart))]
         public virtual ICollection<Product> Products { get; set; }
 
-        public enum Properities { Email, Phone, City, Country };
+        public enum Properties { Email, Phone, City, Country };
 
-        public static string Update(int id, dynamic value, Properities properities)
+        public static string Update(int id, dynamic value, Properties properity)
         {
             bool isFound = Exist(id);
             if (!isFound) return MyExceptions.CartNotFound(id);
             using (ShopyCtx db = new())
             {
-                Cart cart = db.Carts.Where(c => c.Id == id).FirstOrDefault();
-                switch (properities)
+                var cart = db.Carts.FirstOrDefault(c => c.Id == id);
+                switch (properity)
                 {
-                    case Properities.Country:
-                        cart.Country = value;
+                    case Properties.Country:
+                        if (cart != null) cart.Country = value;
                         break;
-                    case Properities.City:
-                        cart.City = value;
+                    case Properties.City:
+                        if (cart != null) cart.City = value;
                         break;
-                    case Properities.Email:
-                        cart.Email = value;
+                    case Properties.Email:
+                        if (cart != null) cart.Email = value;
                         break;
-                    case Properities.Phone:
-                        cart.Phone = value;
+                    case Properties.Phone:
+                        if (cart != null) cart.Phone = value;
                         break;
                 }
                 db.SaveChanges();
@@ -78,44 +78,42 @@ namespace Shopy.Models
             }
         }
 
-        private static bool Exist(int CurtId)
+        private static bool Exist(int curtId)
         {
             using (ShopyCtx db = new())
             {
-                Cart cart = db.Carts.Where(c => c.Id == CurtId).FirstOrDefault();
+                Cart cart = db.Carts.FirstOrDefault(c => c.Id == curtId);
                 return cart != null;
             }
         }
-        private static dynamic Get(int CartId)
+        public static dynamic Get(int cartId)
         {
-            bool isFound = Exist(CartId);
+            bool isFound = Exist(cartId);
             if (!isFound)
             {
-                return MyExceptions.CartNotFound(CartId);
+                return MyExceptions.CartNotFound(cartId);
             }
             using (ShopyCtx db = new())
             {
-                return db.Carts.Where(cart => cart.Id == CartId).FirstOrDefault();
+                return db.Carts.FirstOrDefault(cart => cart.Id == cartId);
             }
         }
-        public static dynamic Delete(int CartId)
+        public static int Count(int cartId)
         {
-            bool isFound = Exist(CartId);
+            bool isFound = Exist(cartId);
             if (!isFound)
-                return MyExceptions.CartNotFound(CartId);
+                return 0;
             using (ShopyCtx db = new())
             {
-                Cart cart = db.Carts.Where(client => client.Id == CartId).FirstOrDefault();
-                db.Carts.Remove(cart);
-                db.SaveChanges();
-                return "Client Deleted";
+                return db.Products.Where(p => p.CartId == cartId).Count();
             }
         }
-        public static string AddToCart(int ClientId, int ProductId) // added by Harby at 12:00 PM
+
+        public static string AddToCart(int ClientId, int ProductId) // added by Harby at 12:00 AM
         {
             using (ShopyCtx db = new())
             {
-                var cartId = db.Carts.Where(c => c.ClientId.Equals(ClientId)).FirstOrDefault();
+                var cartId = db.Carts.FirstOrDefault(c => c.ClientId.Equals(ClientId)).Id;
                 Product.Update(ProductId, ClientId, Product.Properities.ClientId);
                 Product.Update(ProductId, cartId, Product.Properities.CartId);
                 return "successful Transactions";
@@ -125,21 +123,29 @@ namespace Shopy.Models
         {
             using (ShopyCtx db = new())
             {
-                Product.Update(ProductId, 3, Product.Properities.ClientId);
-                Product.Update(ProductId, 1, Product.Properities.CartId);
+                Product.Update(ProductId, null, Product.Properities.ClientId);
+                Product.Update(ProductId, null, Product.Properities.CartId);
                 return "Item is remove from cart";
             }
         }
-        public static string CheckOut(int clientId, int productId)
+        public static string CheckOut(int cartId)
         {
             using (ShopyCtx db = new())
             {
-                Product.Update(productId, 1, Product.Properities.CartId);
+                var cart = Get(cartId);
+                var cartProducs = cart.Products.ToList();
+                foreach (Product p in cartProducs)
+                {
+                    Product.Update(p.Id, null, Product.Properities.CartId);
+                }
                 return "successful Transactions";
             }
         }
+        // :: TODO
+        // add cart total price
         public static List<Product> InCart(int cartId)
         {
+
             using (ShopyCtx db = new())
             {
                 Cart cart = Get(cartId);
