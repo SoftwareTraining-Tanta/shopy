@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using Shopy.Models.shared;
 
 #nullable disable
 
@@ -22,7 +23,7 @@ namespace Shopy.Models
         [Column("vendorId")]
         public int VendorId { get; set; }
         [Column("clientId")]
-        public int ClientId { get; set; }
+        public Nullable<int> ClientId { get; set; }
         [Required]
         [Column("category")]
         [StringLength(20)]
@@ -39,8 +40,7 @@ namespace Shopy.Models
         [StringLength(512)]
         public string ImagePath { get; set; }
         [Column("cartId")]
-        public int? CartId { get; set; }
-
+        public Nullable<int> CartId { get; set; }
         [ForeignKey(nameof(CartId))]
         [InverseProperty("Products")]
         public virtual Cart Cart { get; set; }
@@ -59,29 +59,29 @@ namespace Shopy.Models
             if (!isFound) return MyExceptions.ProductNotFound(id);
             using (ShopyCtx db = new())
             {
-                Product product = db.Products.Where(p => p.Id == id).FirstOrDefault();
+                var product = db.Products.FirstOrDefault(p => p.Id == id);
                 switch (properities)
                 {
                     case Properities.ClientId:
-                        product.ClientId = value;
+                        if(product != null) product.ClientId = value;
                         break;
                     case Properities.Category:
-                        product.Category = value;
+                        if(product != null) product.Category = value;
                         break;
                     case Properities.Model:
-                        product.Model = value;
+                        if(product != null) product.Model = value;
                         break;
                     case Properities.Price:
-                        product.Price = value;
+                        if(product != null) product.Price = value;
                         break;
                     case Properities.Details:
-                        product.Details = value;
+                        if(product != null) product.Details = value;
                         break;
                     case Properities.ImagePath:
-                        product.ImagePath = value;
+                        if(product != null) product.ImagePath = value;
                         break;
                     case Properities.CartId:
-                        product.CartId = value;
+                        if(product != null) product.CartId = value;
                         break;
                 }
                 db.SaveChanges();
@@ -98,25 +98,23 @@ namespace Shopy.Models
             }
             using (ShopyCtx db = new())
             {
-                return db.Products.Where(p => p.Id == productId).FirstOrDefault();
+                return db.Products.FirstOrDefault(p => p.Id == productId);
             }
 
         }
-
         private static bool Exist(int id)
         {
             using (ShopyCtx db = new())
             {
-                Product product = db.Products.Where(p => p.Id == id).FirstOrDefault();
+                Product product = db.Products.FirstOrDefault(p => p.Id == id);
                 return product != null;
             }
         }
-
         public static string Add(Product product)
         {
             using (ShopyCtx db = new())
             {
-                var getProduct = db.Products.Where(v => v.Equals(product)).FirstOrDefault();
+                var getProduct = db.Products.FirstOrDefault(v => v.Equals(product));
                 if (getProduct != null)
                 {
                     return "Client already exists";
@@ -127,11 +125,11 @@ namespace Shopy.Models
             }
         }
 
-        public List<Product> AvailableProducts()
+        public static List<Product> AvailableProducts()
         {
             using (ShopyCtx db = new())
             {
-                return db.Products.Where(p => p.ClientId == 1).ToList();
+                return db.Products.Where(p => p.ClientId == null).ToList();
             }
         }
     }
