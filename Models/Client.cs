@@ -53,103 +53,95 @@ namespace Shopy.Models
         public virtual ICollection<Product> Products { get; set; }
 
 
-        public enum Properities { Name, Email, Phone, City, Country, Password };
-        public static string Add(Client Client)
+        public enum Properties { Name, Email, Phone, City, Country, Password };
+        public static string Add(Client client)
         {
-
             using (ShopyCtx db = new())
             {
-                ILoggerFactory loggerFactory = db.GetService<ILoggerFactory>();
-                loggerFactory.AddProvider(new ConsoleLoggerProvider());
+                // ILoggerFactory loggerFactory = db.GetService<ILoggerFactory>();
+                // loggerFactory.AddProvider(new ConsoleLoggerProvider());
 
-                var getClient = db.Clients.Where(cl => cl.Equals(Client)).FirstOrDefault();
+                var getClient = db.Clients.FirstOrDefault(cl => cl.Equals(client));
                 if (getClient != null)
                 {
                     return "Client already exists";
                 }
 
-                db.Clients.Add(Client);
-                Client.Carts.Add(
+                db.Clients.Add(client);
+                client.Carts.Add(
                     new Cart()
                     {
-                        ClientId = Client.Id,
-                        Country = Client.Country,
-                        City = Client.City,
-                        Phone = Client.Phone,
-                        Email = Client.Email
+                        ClientId = client.Id,
+                        Country = client.Country,
+                        City = client.City,
+                        Phone = client.Phone,
+                        Email = client.Email
                     }
                 );
                 db.SaveChanges();
                 return "Done adding client";
             }
         }
-        public static dynamic Get(int Id)
+        public static dynamic Get(int id)
         {
-            bool isFound = Exist(Id);
+            bool isFound = Exist(id);
             if (!isFound)
             {
-                return MyExceptions.ClientNotFound(Id);
+                return MyExceptions.ClientNotFound(id);
             }
             using (ShopyCtx db = new())
             {
-                return db.Clients.Where(client => client.Id == Id).FirstOrDefault();
-            }
-
-        }
-        private static bool Exist(int Id)
-        {
-            using (ShopyCtx db = new())
-            {
-                Client client = db.Clients.Where(client => client.Id == Id).FirstOrDefault();
-                return client != null;
+                return db.Clients.FirstOrDefault(client => client.Id == id);
             }
         }
-        public static dynamic Delete(int Id)
+        private static bool Exist(int id)
         {
-            if (Id == 1)
-                return MyExceptions.InvalidDeletion(Id);
-            bool isFound = Exist(Id);
+            using ShopyCtx db = new();
+            var client = db.Clients.FirstOrDefault(client => client.Id == id);
+            return client != null;
+        }
+        public static dynamic Delete(int id)
+        {
+            var isFound = Exist(id);
             if (!isFound)
-                return MyExceptions.ClientNotFound(Id);
-            using (ShopyCtx db = new())
-            {
-                Client client = db.Clients.Where(client => client.Id == Id).FirstOrDefault();
-                // Cart cart = db.Carts.Where(c => c.ClientId == Id).FirstOrDefault();
-                // Cart.Delete(cart);
-                db.Clients.Remove(client);
-                db.SaveChanges();
-                return "Client Deleted";
-            }
+                return MyExceptions.ClientNotFound(id);
+            using ShopyCtx db = new();
+            var client = db.Clients.FirstOrDefault(client => client.Id == id);
+            // Cart cart = db.Carts.Where(c => c.ClientId == Id).FirstOrDefault();
+            // Cart.Delete(cart);
+            if (client != null) db.Clients.Remove(client);
+            db.SaveChanges();
+            return "Client Deleted";
         }
-        public static string Update(int Id, dynamic Value, Properities Properities = Properities.Name)
+        public static string Update(int id, dynamic value, Properties Properity = Properties.Name)
         {
-            bool isFound = Exist(Id);
-            if (!isFound) return MyExceptions.ClientNotFound(Id);
+            bool isFound = Exist(id);
+            if (!isFound) return MyExceptions.ClientNotFound(id);
             using (ShopyCtx db = new())
             {
-                Client client = db.Clients.Where(c => c.Id == Id).FirstOrDefault();
-                switch (Properities)
+                var client = db.Clients.FirstOrDefault(c => c.Id == id);
+                switch (Properity)
                 {
-                    case Properities.Name:
-                        client.Name = Value;
+                    case Properties.Name:
+                        if(client != null) client.Name = value;
                         break;
-                    case Properities.Country:
-                        client.Country = Value;
+                    case Properties.Country:
+                        if(client != null) client.Country = value;
                         break;
-                    case Properities.City:
-                        client.City = Value;
+                    case Properties.City:
+                        if(client != null) client.City = value;
                         break;
-                    case Properities.Email:
-                        client.Email = Value;
+                    case Properties.Email:
+                        if(client != null) client.Email = value;
                         break;
-                    case Properities.Phone:
-                        client.Phone = Value;
+                    case Properties.Phone:
+                        if(client != null) client.Phone = value;
                         break;
-                    case Properities.Password:
-                        client.Password = Value;
+                    case Properties.Password:
+                        if(client != null) client.Password = value;
                         break;
                     default:
-                        client.Name = Value;
+                        if(client != null) client.Name = value;
                         break;
                 }
                 db.SaveChanges();
@@ -160,11 +152,12 @@ namespace Shopy.Models
         {
             using (ShopyCtx db = new())
             {
-                List<Client> clients = db.Clients.DefaultIfEmpty().ToList();
-                return clients;
+                var clients = db.Clients.DefaultIfEmpty().ToList();
+                if(clients != null) return clients;
+                return new List<Client>();
             }
         }
-        public static List<Product> ClientProducts(int ClientId)
+        public static List<Product> ClientProducts(int ClientId) // previously bought products
         {
             using (ShopyCtx db = new())
             {
@@ -172,8 +165,12 @@ namespace Shopy.Models
                 // loggerFactory.AddProvider(new ConsoleLoggerProvider());
 
                 // if the product is in the cart, It will not be in this list.
-                Client client = Get(ClientId);
-                return client.Products.Where(p => p.CartId == 1).ToList(); // use join
+        
+                var products = db.Products.Where(p => p.ClientId == ClientId && p.CartId == null).ToList();
+                if (products != null) return products;
+                return new List<Product>();
+                // return client.Products.Where(p => p.CartId == null).ToList(); // use join
+
             }
         }
     }
