@@ -49,7 +49,7 @@ namespace Shopy.Models
         {
             using (ShopyCtx db = new())
             {
-                var getVendor = db.Vendors.Where(v => v.Equals(vendor)).FirstOrDefault();
+                var getVendor = db.Vendors.FirstOrDefault(v => v.Equals(vendor));
                 if (getVendor != null)
                 {
                     return "Client already exists";
