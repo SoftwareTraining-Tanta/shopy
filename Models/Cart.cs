@@ -51,13 +51,13 @@ namespace Shopy.Models
 
         public enum Properties { Email, Phone, City, Country };
 
-        public static string Update(int id, dynamic value, Properties properity)
+        public static string Update(int clientId, dynamic value, Properties properity)
         {
-            bool isFound = Exist(id);
-            if (!isFound) return MyExceptions.CartNotFound(id);
+            bool isFound = Exist(clientId);
+            if (!isFound) return MyExceptions.ClientNotFound(clientId);
             using (ShopyCtx db = new())
             {
-                var cart = db.Carts.FirstOrDefault(c => c.Id == id);
+                var cart = Cart.Get(clientId);
                 switch (properity)
                 {
                     case Properties.Country:
@@ -78,34 +78,39 @@ namespace Shopy.Models
             }
         }
 
-        private static bool Exist(int curtId)
+        private static bool Exist(int clientId)
         {
             using (ShopyCtx db = new())
             {
-                Cart cart = db.Carts.FirstOrDefault(c => c.Id == curtId);
+                var cart = db.Carts.FirstOrDefault(c => c.ClientId == clientId);
                 return cart != null;
             }
         }
-        public static dynamic Get(int cartId)
+        public static dynamic Get(int clientId)
         {
-            bool isFound = Exist(cartId);
-            if (!isFound)
-            {
-                return MyExceptions.CartNotFound(cartId);
-            }
             using (ShopyCtx db = new())
             {
-                return db.Carts.FirstOrDefault(cart => cart.Id == cartId);
+                var cart = db.Carts.FirstOrDefault(cart => cart.ClientId == clientId);
+                if (cart == null)
+                {
+                    return MyExceptions.ClientNotFound(clientId);
+                }
+                return cart;
             }
         }
-        public static int Count(int cartId)
+        public static int Count(int clientId)
         {
-            bool isFound = Exist(cartId);
+            bool isFound = Cart.Exist(clientId);
             if (!isFound)
                 return 0;
             using (ShopyCtx db = new())
             {
-                return db.Products.Where(p => p.CartId == cartId).Count();
+                var cart = db.Carts.FirstOrDefault(c => c.ClientId == clientId);
+                if (cart == null)
+                {
+                    return 0;
+                }
+                return db.Products.Where(p => p.CartId == cart.Id).Count();
             }
         }
 
@@ -113,12 +118,25 @@ namespace Shopy.Models
         {
             using (ShopyCtx db = new())
             {
-                var cartId = db.Carts.FirstOrDefault(c => c.ClientId.Equals(ClientId)).Id;
+                var cartId = db.Carts.FirstOrDefault(c => c.ClientId == ClientId).Id;
                 Product.Update(ProductId, ClientId, Product.Properities.ClientId);
                 Product.Update(ProductId, cartId, Product.Properities.CartId);
                 return "successful Transactions";
             }
         }
+
+        public static decimal TotalPrice(int clientId)
+        {
+            if (!Exist(clientId))
+            {
+                return 0;
+            }
+            using (ShopyCtx db = new())
+            {
+                return db.Products.Where(p => p.ClientId == clientId).Sum(p => p.Price);
+            }
+        }
+
         public static string RemoveFromCart(int ProductId)
         {
             using (ShopyCtx db = new())
@@ -128,11 +146,16 @@ namespace Shopy.Models
                 return "Item is remove from cart";
             }
         }
-        public static string CheckOut(int cartId)
+        public static string CheckOut(int clientId)
         {
             using (ShopyCtx db = new())
             {
-                var cart = Get(cartId);
+                var cart = db.Carts.FirstOrDefault(c => c.ClientId == clientId);
+                if (cart == null)
+                {
+                    // No exceptions for the client, no cart -> no client
+                    return MyExceptions.ClientNotFound(clientId);
+                }
                 var cartProducs = cart.Products.ToList();
                 foreach (Product p in cartProducs)
                 {
@@ -141,23 +164,18 @@ namespace Shopy.Models
                 return "successful Transactions";
             }
         }
-        // :: TODO
-        // add cart total price
-        public static List<Product> InCart(int cartId)
+
+        public static List<Product> InCart(int clientId)
         {
 
             using (ShopyCtx db = new())
             {
-                Cart cart = Get(cartId);
+                var cart = db.Carts.FirstOrDefault(c => c.ClientId == clientId);
+                if (cart == null)
+                {
+                    return new List<Product>();
+                }
                 return cart.Products.ToList();
-            }
-        }
-        public static int CountInCart(int cartId)
-        {
-            using (ShopyCtx db = new())
-            {
-                Cart cart = Get(cartId);
-                return cart.Products.Count();
             }
         }
     }
