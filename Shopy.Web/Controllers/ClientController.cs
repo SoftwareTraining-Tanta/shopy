@@ -2,9 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 namespace Northwind.WebApi.Controllers;
 
-using System;
 using Shopy.Models;
-using Shopy.Dtos;
+using Shopy.Models.Dtos;
+using Shopy.Models.Shared;
+
 [ApiController]
 [Route("api/clients/")]
 public class ClientController : ControllerBase
@@ -16,29 +17,30 @@ public class ClientController : ControllerBase
     // {
     //     _logger = logger;
     // }
-    [HttpGet("{id:int}")]
+    [HttpGet("id={id:int}")]
     public ClientDto Get(int id)
     {
-        return new ClientDto
-        {
-            Id = Client.Get(id).Id,
-            Name = Client.Get(id).Name,
-            City = Client.Get(id).City,
-            Phone = Client.Get(id).Phone,
-            Email = Client.Get(id).Email,
-            Country = Client.Get(id).Country,
-            Products = Client.ClientProducts(id)
-        };
+        ClientDto client = Client.Get(id).AsDto();
+        return client;
     }
-    [HttpGet("/limit={limit:int}")]
+    [HttpGet("limit={limit:int}")]
     public dynamic GetLimit(int limit)
     {
         return Client.AllClients(limit);
     }
-    public class WeatherForecast
+    [HttpPut("id={id}/value={value}/Properity={properity}")]
+    public string update(int id, string value)
     {
-        public DateTime Date { get; set; }
-        public int TemperatureC { get; set; }
-        public string? Summary { get; set; }
+        return Client.Update(id, value);
+    }
+    [HttpPost]
+    public string Add(ClientDto client)
+    {
+        return Client.Add(client);
+    }
+    [HttpDelete]
+    public dynamic Delete(int id)
+    {
+        return Client.Delete(id);
     }
 }
