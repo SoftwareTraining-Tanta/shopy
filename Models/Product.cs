@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using Shopy.Models.shared;
+using Shopy.Models.Shared;
 
 #nullable disable
 
@@ -63,25 +63,25 @@ namespace Shopy.Models
                 switch (properities)
                 {
                     case Properities.ClientId:
-                        if(product != null) product.ClientId = value;
+                        if (product != null) product.ClientId = value;
                         break;
                     case Properities.Category:
-                        if(product != null) product.Category = value;
+                        if (product != null) product.Category = value;
                         break;
                     case Properities.Model:
-                        if(product != null) product.Model = value;
+                        if (product != null) product.Model = value;
                         break;
                     case Properities.Price:
-                        if(product != null) product.Price = value;
+                        if (product != null) product.Price = value;
                         break;
                     case Properities.Details:
-                        if(product != null) product.Details = value;
+                        if (product != null) product.Details = value;
                         break;
                     case Properities.ImagePath:
-                        if(product != null) product.ImagePath = value;
+                        if (product != null) product.ImagePath = value;
                         break;
                     case Properities.CartId:
-                        if(product != null) product.CartId = value;
+                        if (product != null) product.CartId = value;
                         break;
                 }
                 db.SaveChanges();
