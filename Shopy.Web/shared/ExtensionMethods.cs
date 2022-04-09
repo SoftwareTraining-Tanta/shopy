@@ -7,7 +7,6 @@ public static class ExtensionMethods
     {
         return new ClientDto
         {
-            Id = client.Id,
             Name = client.Name,
             Country = client.Country,
             City = client.City,
@@ -20,7 +19,6 @@ public static class ExtensionMethods
     {
         return new CartDto
         {
-            Id = cart.Id,
             City = cart.City,
             Country = cart.Country,
             Email = cart.Email,
@@ -34,7 +32,6 @@ public static class ExtensionMethods
         {
             Category = product.Category,
             Details = product.Details,
-            Id = product.Id,
             ImagePath = product.ImagePath,
             Model = product.Model,
             Price = product.Price
@@ -71,7 +68,6 @@ public static class ExtensionMethods
     {
         return new Client
         {
-            Id = clientDto.Id,
             Name = clientDto.Name,
             Country = clientDto.Country,
             City = clientDto.City,

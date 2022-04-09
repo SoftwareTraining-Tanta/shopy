@@ -20,7 +20,6 @@ public class CartController : ControllerBase
         Cart cart = Cart.Get(clientId);
         return new CartDto
         {
-            Id = cart.Id,
             City = cart.City,
             Country = cart.Country,
             Email = cart.Email,
