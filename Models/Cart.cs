@@ -1,12 +1,13 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-
-using Shopy.Models.Shared;
-using Shopy.Models.Dtos;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.Logging;
+using Shopy.Models.shared;
 #nullable disable
 
 namespace Shopy.Models
@@ -25,7 +26,7 @@ namespace Shopy.Models
         public int Id { get; set; }
         [Required]
         [Column("clientId")]
-        public Nullable<int> ClientId { get; set; }
+        public int ClientId { get; set; }
         [Required]
         [Column("country")]
         [StringLength(30)]
@@ -50,13 +51,13 @@ namespace Shopy.Models
 
         public enum Properties { Email, Phone, City, Country };
 
-        public static string Update(int clientId, dynamic value, Properties properity = Properties.City)
+        public static string Update(int clientId, dynamic value, Properties properity)
         {
             bool isFound = Exist(clientId);
             if (!isFound) return MyExceptions.ClientNotFound(clientId);
             using (ShopyCtx db = new())
             {
-                Cart cart = Cart.Get(clientId);
+                var cart = Cart.Get(clientId);
                 switch (properity)
                 {
                     case Properties.Country:
@@ -89,7 +90,7 @@ namespace Shopy.Models
         {
             using (ShopyCtx db = new())
             {
-                Cart cart = db.Carts.FirstOrDefault(cart => cart.ClientId == clientId);
+                var cart = db.Carts.FirstOrDefault(cart => cart.ClientId == clientId);
                 if (cart == null)
                 {
                     return MyExceptions.ClientNotFound(clientId);
@@ -104,7 +105,7 @@ namespace Shopy.Models
                 return 0;
             using (ShopyCtx db = new())
             {
-                Cart cart = db.Carts.FirstOrDefault(c => c.ClientId == clientId);
+                var cart = db.Carts.FirstOrDefault(c => c.ClientId == clientId);
                 if (cart == null)
                 {
                     return 0;
@@ -117,7 +118,7 @@ namespace Shopy.Models
         {
             using (ShopyCtx db = new())
             {
-                var cartId = db.Carts.Where(c => c.ClientId == ClientId).FirstOrDefault().Id;
+                var cartId = db.Carts.FirstOrDefault(c => c.ClientId == ClientId).Id;
                 Product.Update(ProductId, ClientId, Product.Properities.ClientId);
                 Product.Update(ProductId, cartId, Product.Properities.CartId);
                 return "successful Transactions";
@@ -142,7 +143,7 @@ namespace Shopy.Models
             {
                 Product.Update(ProductId, null, Product.Properities.ClientId);
                 Product.Update(ProductId, null, Product.Properities.CartId);
-                return "Item is removed from cart";
+                return "Item is remove from cart";
             }
         }
         public static string CheckOut(int clientId)
@@ -164,18 +165,17 @@ namespace Shopy.Models
             }
         }
 
-        public static dynamic InCart(int clientId)
+        public static List<Product> InCart(int clientId)
         {
 
             using (ShopyCtx db = new())
             {
-                int cartId = Cart.Get(clientId).Id;
-                var products = db.Products.Where(c => c.ClientId == clientId && c.CartId == cartId).DefaultIfEmpty().ToList();
-                if (products == null)
+                var cart = db.Carts.FirstOrDefault(c => c.ClientId == clientId);
+                if (cart == null)
                 {
-                    return "Failed operation";
+                    return new List<Product>();
                 }
-                return products;
+                return cart.Products.ToList();
             }
         }
     }
