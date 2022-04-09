@@ -31,10 +31,7 @@ public static class ExtensionMethods
         return new ProductDto
         {
             Category = product.Category,
-            Details = product.Details,
-            ImagePath = product.ImagePath,
             Model = product.Model,
-            Price = product.Price
         };
     }
     public static ICollection<ProductDto> AsDto(this ICollection<Product> products)

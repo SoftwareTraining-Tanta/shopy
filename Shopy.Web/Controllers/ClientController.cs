@@ -17,10 +17,10 @@ public class ClientController : ControllerBase
     // {
     //     _logger = logger;
     // }
-    [HttpGet("id={id:int}")]
-    public ClientDto Get(int id)
+    [HttpGet("username={username}")]
+    public ClientDto Get(string username)
     {
-        ClientDto client = Client.Get(id).AsDto();
+        ClientDto client = Client.Get(username).AsDto();
         return client;
     }
     [HttpGet("limit={limit:int}")]
@@ -28,10 +28,10 @@ public class ClientController : ControllerBase
     {
         return Client.AllClients(limit).AsDto();
     }
-    [HttpPut("id={id}/value={value}/Properity={properity}")]
-    public string update(int id, string value)
+    [HttpPut("username={username}/value={value}/Properity={properity}")]
+    public string update(string username, string value)
     {
-        return Client.Update(id, value);
+        return Client.Update(username, value);
     }
     [HttpPost]
     public string Add(ClientDto client)
@@ -39,8 +39,8 @@ public class ClientController : ControllerBase
         return Client.Add(client.AsNormal());
     }
     [HttpDelete]
-    public dynamic Delete(int id)
+    public dynamic Delete(string username)
     {
-        return Client.Delete(id);
+        return Client.Delete(username);
     }
 }

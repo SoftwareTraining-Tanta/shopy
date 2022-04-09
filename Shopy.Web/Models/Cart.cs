@@ -8,7 +8,7 @@ using Shopy.Models.Shared;
 namespace Shopy.Models
 {
     [Table("carts")]
-    [Index(nameof(ClientId), Name = "clientId")]
+    [Index(nameof(ClientUsername), Name = "clientUsername")]
     public partial class Cart
     {
         public Cart()
@@ -20,9 +20,9 @@ namespace Shopy.Models
         [Column("id")]
         public int Id { get; set; }
         [Required]
-        [Column("clientId")]
-        public int ClientId { get; set; }
-        [Required]
+        [Column("clientUsername")]
+        [StringLength(30)]
+        public string ClientUsername { get; set; }
         [Column("country")]
         [StringLength(30)]
         public string Country { get; set; }
@@ -38,21 +38,21 @@ namespace Shopy.Models
         [StringLength(60)]
         public string Email { get; set; }
 
-        [ForeignKey(nameof(ClientId))]
-        [InverseProperty("Carts")]
-        public virtual Client Client { get; set; }
+        [ForeignKey(nameof(ClientUsername))]
+        [InverseProperty(nameof(Client.Carts))]
+        public virtual Client ClientNavigation { get; set; }
         [InverseProperty(nameof(Product.Cart))]
         public virtual ICollection<Product> Products { get; set; }
 
         public enum Properties { Email, Phone, City, Country };
 
-        public static string Update(int clientId, dynamic value, Properties properity = Properties.Phone)
+        public static string Update(string clientUsername, dynamic value, Properties properity = Properties.Phone)
         {
-            bool isFound = Exist(clientId);
-            if (!isFound) return MyExceptions.ClientNotFound(clientId);
+            bool isFound = Exist(clientUsername);
+            if (!isFound) return MyExceptions.ClientNotFound(clientUsername);
             using (ShopyCtx db = new())
             {
-                var cart = Cart.Get(clientId);
+                var cart = Cart.Get(clientUsername);
                 switch (properity)
                 {
                     case Properties.Country:
@@ -73,34 +73,34 @@ namespace Shopy.Models
             }
         }
 
-        private static bool Exist(int clientId)
+        private static bool Exist(string clientUsername)
         {
             using (ShopyCtx db = new())
             {
-                var cart = db.Carts.FirstOrDefault(c => c.ClientId == clientId);
+                var cart = db.Carts.FirstOrDefault(c => c.ClientUsername == clientUsername);
                 return cart != null;
             }
         }
-        public static dynamic Get(int clientId)
+        public static dynamic Get(string clientUsername)
         {
             using (ShopyCtx db = new())
             {
-                var cart = db.Carts.FirstOrDefault(cart => cart.ClientId == clientId);
+                var cart = db.Carts.FirstOrDefault(cart => cart.ClientUsername == clientUsername);
                 if (cart == null)
                 {
-                    return MyExceptions.ClientNotFound(clientId);
+                    return MyExceptions.ClientNotFound(clientUsername);
                 }
                 return cart;
             }
         }
-        public static int Count(int clientId)
+        public static int Count(string clientUsername)
         {
-            bool isFound = Cart.Exist(clientId);
+            bool isFound = Cart.Exist(clientUsername);
             if (!isFound)
                 return 0;
             using (ShopyCtx db = new())
             {
-                var cart = db.Carts.FirstOrDefault(c => c.ClientId == clientId);
+                var cart = db.Carts.FirstOrDefault(c => c.ClientUsername == clientUsername);
                 if (cart == null)
                 {
                     return 0;
@@ -109,26 +109,26 @@ namespace Shopy.Models
             }
         }
 
-        public static string AddToCart(int ClientId, int ProductId) // added by Harby at 12:00 AM
+        public static string AddToCart(string ClientUsername, int ProductId) // added by Harby at 12:00 AM
         {
             using (ShopyCtx db = new())
             {
-                var cartId = db.Carts.FirstOrDefault(c => c.ClientId == ClientId).Id;
-                Product.Update(ProductId, ClientId, Product.Properities.ClientId);
+                var cartId = db.Carts.FirstOrDefault(c => c.ClientUsername == ClientUsername).Id;
+                Product.Update(ProductId, ClientUsername, Product.Properities.ClientUsername);
                 Product.Update(ProductId, cartId, Product.Properities.CartId);
                 return "successful Transactions";
             }
         }
 
-        public static decimal TotalPrice(int clientId)
+        public static decimal TotalPrice(string clientUsername)
         {
-            if (!Exist(clientId))
+            if (!Exist(clientUsername))
             {
                 return 0;
             }
             using (ShopyCtx db = new())
             {
-                return db.Products.Where(p => p.ClientId == clientId).Sum(p => p.Price);
+                return db.Products.Where(p => p.ClientUsername == clientUsername).Include(p => p.ModelNavigation).Sum(p => p.ModelNavigation.Price);
             }
         }
 
@@ -136,20 +136,20 @@ namespace Shopy.Models
         {
             using (ShopyCtx db = new())
             {
-                Product.Update(ProductId, null, Product.Properities.ClientId);
+                Product.Update(ProductId, null, Product.Properities.ClientUsername);
                 Product.Update(ProductId, null, Product.Properities.CartId);
                 return "Item is remove from cart";
             }
         }
-        public static string CheckOut(int clientId)
+        public static string CheckOut(string clientUsername)
         {
             using (ShopyCtx db = new())
             {
-                var cart = db.Carts.FirstOrDefault(c => c.ClientId == clientId);
+                var cart = db.Carts.FirstOrDefault(c => c.ClientUsername == clientUsername);
                 if (cart == null)
                 {
                     // No exceptions for the client, no cart -> no client
-                    return MyExceptions.ClientNotFound(clientId);
+                    return MyExceptions.ClientNotFound(clientUsername);
                 }
                 var cartProducs = cart.Products.ToList();
                 foreach (Product p in cartProducs)
@@ -160,12 +160,12 @@ namespace Shopy.Models
             }
         }
 
-        public static List<Product> InCart(int clientId)
+        public static List<Product> InCart(string clientUsername)
         {
 
             using (ShopyCtx db = new())
             {
-                var cart = db.Carts.FirstOrDefault(c => c.ClientId == clientId);
+                var cart = db.Carts.FirstOrDefault(c => c.ClientUsername == clientUsername);
                 if (cart == null)
                 {
                     return new List<Product>();

@@ -12,46 +12,47 @@ namespace Shopy.Models
 {
     [Table("products")]
     [Index(nameof(CartId), Name = "cartId")]
-    [Index(nameof(ClientId), Name = "clientId")]
-    [Index(nameof(VendorId), Name = "vendorId")]
+    [Index(nameof(ClientUsername), Name = "clientId")]
+    [Index(nameof(VendorUsername), Name = "vendorId")]
     public partial class Product
     {
         [Key]
         [Column("id")]
         public int Id { get; set; }
         [Required]
-        [Column("vendorId")]
-        public int VendorId { get; set; }
-        [Column("clientId")]
-        public Nullable<int> ClientId { get; set; }
+        [Column("vendorUsername")]
+        [StringLength(30)]
+        public string VendorUsername { get; set; }
         [Required]
         [Column("category")]
         [StringLength(20)]
         public string Category { get; set; }
+        [Required]
         [Column("model")]
-        [StringLength(30)]
+        [StringLength(300)]
         public string Model { get; set; }
-        [Column("price", TypeName = "decimal(7,2)")]
-        public decimal Price { get; set; }
-        [Column("details")]
-        [StringLength(512)]
-        public string Details { get; set; }
-        [Column("imagePath")]
-        [StringLength(512)]
-        public string ImagePath { get; set; }
+        [Column("clientUsername")]
+        [StringLength(30)]
+        public string ClientUsername { get; set; }
         [Column("cartId")]
-        public Nullable<int> CartId { get; set; }
+        public int? CartId { get; set; }
+        [Column("rate", TypeName = "decimal(2,1)")]
+        public decimal? Rate { get; set; }
+
         [ForeignKey(nameof(CartId))]
         [InverseProperty("Products")]
         public virtual Cart Cart { get; set; }
-        [ForeignKey(nameof(ClientId))]
+        [ForeignKey(nameof(ClientUsername))]
+        [InverseProperty(nameof(Client.Products))]
+        public virtual Client ClientNavigation { get; set; }
+        [ForeignKey(nameof(Model))]
         [InverseProperty("Products")]
-        public virtual Client Client { get; set; }
-        [ForeignKey(nameof(VendorId))]
-        [InverseProperty("Products")]
-        public virtual Vendor Vendor { get; set; }
+        public virtual Model ModelNavigation { get; set; }
+        [ForeignKey(nameof(VendorUsername))]
+        [InverseProperty(nameof(Vendor.Products))]
+        public virtual Vendor VendorNavigation { get; set; }
 
-        public enum Properities { ClientId, Category, Model, Price, Details, ImagePath, CartId };
+        public enum Properities { ClientUsername, Category, Model, Price, Details, ImagePath, CartId };
 
         public static string Update(int id, dynamic value, Properities properities)
         {
@@ -62,26 +63,14 @@ namespace Shopy.Models
                 var product = db.Products.FirstOrDefault(p => p.Id == id);
                 switch (properities)
                 {
-                    case Properities.ClientId:
-                        if(product != null) product.ClientId = value;
+                    case Properities.ClientUsername:
+                        if (product != null) product.ClientUsername = value;
                         break;
                     case Properities.Category:
-                        if(product != null) product.Category = value;
+                        if (product != null) product.Category = value;
                         break;
                     case Properities.Model:
-                        if(product != null) product.Model = value;
-                        break;
-                    case Properities.Price:
-                        if(product != null) product.Price = value;
-                        break;
-                    case Properities.Details:
-                        if(product != null) product.Details = value;
-                        break;
-                    case Properities.ImagePath:
-                        if(product != null) product.ImagePath = value;
-                        break;
-                    case Properities.CartId:
-                        if(product != null) product.CartId = value;
+                        if (product != null) product.Model = value;
                         break;
                 }
                 db.SaveChanges();
@@ -116,7 +105,7 @@ namespace Shopy.Models
             {
                 var getProduct = db.Products.FirstOrDefault(v => v.Equals(product));
                 if (getProduct != null)
-                {   
+                {
                     return "Client already exists";
                 }
                 db.Products.Add(product);
@@ -129,7 +118,7 @@ namespace Shopy.Models
         {
             using (ShopyCtx db = new())
             {
-                return db.Products.Where(p => p.ClientId == null).ToList();
+                return db.Products.Where(p => p.ClientUsername == null).ToList();
             }
         }
     }

@@ -19,6 +19,7 @@ namespace Shopy.Models
 
         public virtual DbSet<Cart> Carts { get; set; }
         public virtual DbSet<Client> Clients { get; set; }
+        public virtual DbSet<Model> Models { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Vendor> Vendors { get; set; }
 
@@ -26,8 +27,8 @@ namespace Shopy.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseMySQL("server=localhost;database=shopy;user=root;password=root");
+// #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseMySQL("server=localhost;database=shopy;username=root;password=2510203121");
             }
         }
 
@@ -35,31 +36,55 @@ namespace Shopy.Models
         {
             modelBuilder.Entity<Cart>(entity =>
             {
-                entity.HasOne(d => d.Client)
+                entity.HasOne(d => d.ClientNavigation)
                     .WithMany(p => p.Carts)
-                    .HasForeignKey(d => d.ClientId)
-                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasForeignKey(d => d.ClientUsername)
                     .HasConstraintName("carts_ibfk_1");
+            });
+
+            modelBuilder.Entity<Client>(entity =>
+            {
+                entity.HasKey(e => e.Username)
+                    .HasName("PRIMARY");
+            });
+
+            modelBuilder.Entity<Model>(entity =>
+            {
+                entity.HasKey(e => e.Name)
+                    .HasName("PRIMARY");
             });
 
             modelBuilder.Entity<Product>(entity =>
             {
+                entity.Property(e => e.Rate).HasDefaultValueSql("'0.0'");
+
                 entity.HasOne(d => d.Cart)
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.CartId)
                     .HasConstraintName("products_ibfk_3");
 
-                entity.HasOne(d => d.Client)
+                entity.HasOne(d => d.ClientNavigation)
                     .WithMany(p => p.Products)
-                    .HasForeignKey(d => d.ClientId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasForeignKey(d => d.ClientUsername)
                     .HasConstraintName("products_ibfk_2");
 
-                entity.HasOne(d => d.Vendor)
+                entity.HasOne(d => d.ModelNavigation)
                     .WithMany(p => p.Products)
-                    .HasForeignKey(d => d.VendorId)
+                    .HasForeignKey(d => d.Model)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("products_ibfk_4");
+
+                entity.HasOne(d => d.VendorNavigation)
+                    .WithMany(p => p.Products)
+                    .HasForeignKey(d => d.VendorUsername)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("products_ibfk_1");
+            });
+
+            modelBuilder.Entity<Vendor>(entity =>
+            {
+                entity.HasKey(e => e.Username)
+                    .HasName("PRIMARY");
             });
 
             OnModelCreatingPartial(modelBuilder);

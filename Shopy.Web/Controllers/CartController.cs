@@ -9,38 +9,38 @@ using Shopy.Models.Shared;
 [Route("api/carts/")]
 public class CartController : ControllerBase
 {
-    [HttpPost("{cid:int}/{pid:int}")]
-    public string Add(int cid, int pid)
+    [HttpPost("{customerUsername}/{pid:int}")]
+    public string Add(string customerUsername, int pid)
     {
-        return Cart.AddToCart(cid, pid);
+        return Cart.AddToCart(customerUsername, pid);
     }
-    [HttpGet("clientId={clientId:int}")]
-    public CartDto Get(int clientId)
+    [HttpGet("clientUsername={clientUsername}")]
+    public CartDto Get(string clientUsername)
     {
-        Cart cart = Cart.Get(clientId);
+        Cart cart = Cart.Get(clientUsername);
         return new CartDto
         {
             City = cart.City,
             Country = cart.Country,
             Email = cart.Email,
             Phone = cart.Phone,
-            Products = Cart.InCart(clientId).AsDto()
+            Products = Cart.InCart(clientUsername).AsDto()
         };
     }
     [HttpPut("id={id}/value={value}/Properity={properity}")]
-    public string update(int id, string value)
+    public string update(string clientUsername, string value)
     {
-        return Cart.Update(id, value);
+        return Cart.Update(clientUsername, value);
     }
-    [HttpGet("{cntById:int}")]
-    public int GetCount(int cntById)
+    [HttpGet("{clientUsername}")]
+    public int GetCount(string clientUsername)
     {
-        return Cart.Count(cntById);
+        return Cart.Count(clientUsername);
     }
-    [HttpGet("totPriceById={id:int}")]
-    public decimal PriceById(int id)
+    [HttpGet("totPriceByUsername={clientUsername}")]
+    public decimal PriceById(string clientUsername)
     {
-        return Cart.TotalPrice(id);
+        return Cart.TotalPrice(clientUsername);
     }
     [HttpDelete("productId={id:int}")]
     public string Delete(int id)
