@@ -26,7 +26,7 @@ public class ClientController : ControllerBase
     [HttpGet("limit={limit:int}")]
     public dynamic GetLimit(int limit)
     {
-        return Client.AllClients(limit);
+        return Client.AllClients(limit).AsDto();
     }
     [HttpPut("id={id}/value={value}/Properity={properity}")]
     public string update(int id, string value)
@@ -36,7 +36,7 @@ public class ClientController : ControllerBase
     [HttpPost]
     public string Add(ClientDto client)
     {
-        return Client.Add(client);
+        return Client.Add(client.AsNormal());
     }
     [HttpDelete]
     public dynamic Delete(int id)

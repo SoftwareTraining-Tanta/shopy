@@ -8,7 +8,9 @@
     ".NETCoreApp,Version=v6.0": {
       "Shopy.Web/1.0.0": {
         "dependencies": {
-          "Models": "1.0.0",
+          "Microsoft.EntityFrameworkCore": "6.0.0",
+          "Microsoft.EntityFrameworkCore.Design": "6.0.0",
+          "MySql.EntityFrameworkCore": "6.0.0",
           "Swashbuckle.AspNetCore": "6.0.0"
         },
         "runtime": {
@@ -388,16 +390,6 @@
             "fileVersion": "4.700.19.56404"
           }
         }
-      },
-      "Models/1.0.0": {
-        "dependencies": {
-          "Microsoft.EntityFrameworkCore": "6.0.0",
-          "Microsoft.EntityFrameworkCore.Design": "6.0.0",
-          "MySql.EntityFrameworkCore": "6.0.0"
-        },
-        "runtime": {
-          "Models.dll": {}
-        }
       }
     }
   },
@@ -707,11 +699,6 @@
       "sha512": "sha512-CeWTdRNfRaSh0pm2gDTJFwVaXfTq6Xwv/sA887iwPTneW7oMtMlpvDIO+U60+3GWTB7Aom6oQwv5VZVUhQRdPQ==",
       "path": "system.windows.extensions/4.7.0",
       "hashPath": "system.windows.extensions.4.7.0.nupkg.sha512"
-    },
-    "Models/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
     }
   }
 }

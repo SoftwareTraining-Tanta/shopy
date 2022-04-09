@@ -3,6 +3,8 @@ namespace Northwind.WebApi.Controllers;
 
 using Shopy.Models;
 using Shopy.Models.Dtos;
+using Shopy.Models.Shared;
+
 [ApiController]
 [Route("api/carts/")]
 public class CartController : ControllerBase
@@ -23,7 +25,7 @@ public class CartController : ControllerBase
             Country = cart.Country,
             Email = cart.Email,
             Phone = cart.Phone,
-            Products = Cart.InCart(clientId)
+            Products = Cart.InCart(clientId).AsDto()
         };
     }
     [HttpPut("id={id}/value={value}/Properity={properity}")]

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "tfOmSukY3o0VHnt1weZBwO3p0Kprp+YykOYjM0zDMdbmgwx7AyjbSefdzkq6gmu8IIK1kXhiIVAE2cK1En7OUw==",
+  "dgSpecHash": "fyPYnOz4aqwsWINvTISjYBqQxPuieR+Fzeyi2SGBTbI8hHdSs0R6mfZMfSsKoY2Kin9NDpbopKlpmoAobMPIJg==",
   "success": true,
-  "projectFilePath": "/home/mab/Desktop/softwareProject/Shopy.Web/Shopy.Web.csproj",
+  "projectFilePath": "/home/mab/Desktop/SoftwareProjectNew2/shopy/Shopy.Web/Shopy.Web.csproj",
   "expectedPackageFiles": [
     "/home/mab/.nuget/packages/bouncycastle.netcore/1.8.5/bouncycastle.netcore.1.8.5.nupkg.sha512",
     "/home/mab/.nuget/packages/google.protobuf/3.14.0/google.protobuf.3.14.0.nupkg.sha512",
