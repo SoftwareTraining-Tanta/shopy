@@ -1,6 +1,6 @@
 using System;
 
-namespace Shopy.Models.Dtos;
+namespace Shopy.Web.Dtos;
 #nullable disable
 public class ProductDto
 {

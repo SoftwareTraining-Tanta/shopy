@@ -1,5 +1,5 @@
 using System.Text.Json.Serialization;
-using Shopy.Models;
+using Shopy.Web.Models;
 public class Startup
 {
     public void ConfigureServices(IServiceCollection services)

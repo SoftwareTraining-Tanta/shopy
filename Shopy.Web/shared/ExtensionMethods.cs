@@ -1,6 +1,6 @@
-using System.Collections.Generic;
-using Shopy.Models.Dtos;
-namespace Shopy.Models.Shared;
+using Shopy.Web.Models;
+using Shopy.Web.Dtos;
+namespace Shopy.Web.Shared;
 public static class ExtensionMethods
 {
     public static ClientDto AsDto(this Client client)

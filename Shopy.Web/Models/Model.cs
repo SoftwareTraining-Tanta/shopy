@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 #nullable disable
 
-namespace Shopy.Models
+namespace Shopy.Web.Models
 {
     [Table("models")]
     public partial class Model

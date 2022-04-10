@@ -1,5 +1,5 @@
 using System;
-namespace Shopy.Models.Shared;
+namespace Shopy.Web.Shared;
 
 public class MyExceptions
 {

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 #nullable disable
 
-namespace Shopy.Models
+namespace Shopy.Web.Models
 {
     [Table("vendors")]
     public partial class Vendor

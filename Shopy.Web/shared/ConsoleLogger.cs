@@ -2,7 +2,7 @@ using System;
 using Microsoft.Extensions.Logging;
 using static System.Console;
 #nullable disable
-namespace Shopy.Models.Shared;
+namespace Shopy.Web.Shared;
 public class ConsoleLoggerProvider : ILoggerProvider
 {
     public void Dispose() { }

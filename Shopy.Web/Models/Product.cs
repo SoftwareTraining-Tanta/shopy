@@ -4,11 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using Shopy.Models.Shared;
+using Shopy.Web.Shared;
 
 #nullable disable
 
-namespace Shopy.Models
+namespace Shopy.Web.Models
 {
     [Table("products")]
     [Index(nameof(CartId), Name = "cartId")]

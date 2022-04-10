@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 namespace Northwind.WebApi.Controllers;
 
-using Shopy.Models;
-using Shopy.Models.Dtos;
-using Shopy.Models.Shared;
+using Shopy.Web.Models;
+using Shopy.Web.Dtos;
+using Shopy.Web.Shared;
 
 [ApiController]
 [Route("api/clients/")]
