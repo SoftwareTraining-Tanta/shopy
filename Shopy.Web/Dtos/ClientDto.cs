@@ -1,10 +1,10 @@
-using System.Collections.Generic;
-using Shopy.Models;
+
 
 namespace Shopy.Models.Dtos;
 #nullable disable
 public class ClientDto
 {
+    public string Username { get; set; }
     public string Name { get; set; }
     public string Country { get; set; }
     public string City { get; set; }

@@ -7,6 +7,7 @@ public static class ExtensionMethods
     {
         return new ClientDto
         {
+            Username = client.Username,
             Name = client.Name,
             Country = client.Country,
             City = client.City,
@@ -71,6 +72,7 @@ public static class ExtensionMethods
             Email = clientDto.Email,
             Password = clientDto.Password,
             Phone = clientDto.Phone,
+            Username = clientDto.Username
         };
     }
 }

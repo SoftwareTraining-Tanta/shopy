@@ -38,7 +38,7 @@ namespace Shopy.Models
         [StringLength(600)]
         public string Features { get; set; }
 
-        [InverseProperty(nameof(Product.Model))]
+        [InverseProperty(nameof(Product.ModelNavigation))]
         public virtual ICollection<Product> Products { get; set; }
     }
 }
