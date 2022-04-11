@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "OXtFaY0bK9yxx05mI9prWrVZprg/sLFfq6oNGzIbSNDY5TUPeMIDJFvlQ/tP0/BJeokEAF4yKYGIpPWxPmmoyA==",
+  "dgSpecHash": "R1troJF61TCVXYr1JkTtHe8/8bPpn4bIIaCJCB5+gu3M402guLtTjNzt0I1KX3a4ik/402ViekXkcYhPP8JL+g==",
   "success": true,
-  "projectFilePath": "/home/mab/Desktop/soft/shopy/Shopy.Web/Shopy.Web.csproj",
+  "projectFilePath": "/home/mab/Desktop/SoftwareProject/shopy/Shopy.Web/Shopy.Web.csproj",
   "expectedPackageFiles": [
     "/home/mab/.nuget/packages/humanizer.core/2.8.26/humanizer.core.2.8.26.nupkg.sha512",
     "/home/mab/.nuget/packages/microsoft.entityframeworkcore/6.0.0/microsoft.entityframeworkcore.6.0.0.nupkg.sha512",

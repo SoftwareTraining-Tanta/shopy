@@ -41,6 +41,10 @@ public partial class Client
     [StringLength(60)]
     public string Email { get; set; }
     [Required]
+    [Column("verificationCode")]
+    [StringLength(6)]
+    public string VerificationCode { get; set; }
+    [Required]
     [Column("password")]
     [StringLength(100)]
     public string Password { get; set; }
@@ -78,23 +82,20 @@ public partial class Client
             return "Done adding client";
         }
     }
-    public static dynamic Get(string username)
+    public static Client Get(string username)
     {
-        bool isFound = Exist(username);
-        if (!isFound)
-        {
-            return MyExceptions.ClientNotFound(username);
-        }
         using (ShopyCtx db = new())
         {
             return db.Clients.FirstOrDefault(client => client.Username == username);
         }
     }
-    private static bool Exist(string username)
+    public static bool Exist(string username)
     {
-        using ShopyCtx db = new();
-        var client = db.Clients.FirstOrDefault(client => client.Username == username);
-        return client != null;
+        using (ShopyCtx db = new())
+        {
+            Client client = db.Clients.FirstOrDefault(cl => cl.Username == username);
+            return client != null;
+        }
     }
     public static string Delete(string username)
     {
@@ -142,6 +143,14 @@ public partial class Client
             }
             db.SaveChanges();
             return "Updated";
+        }
+    }
+    public static void UpdateVerificationCode(Client client, string verificationCode)
+    {
+        using (ShopyCtx db = new())
+        {
+            client.VerificationCode = verificationCode;
+            db.SaveChanges();
         }
     }
     public static List<Client> AllClients(int limit)
