@@ -27,7 +27,10 @@ namespace Shopy.Web.Models
         [Column("price", TypeName = "decimal(9,2)")]
         public decimal Price { get; set; }
         [Column("salePrice", TypeName = "decimal(10,0)")]
+
         public decimal? SalePrice { get; set; }
+        [Column("rate", TypeName = "decimal(2,1)")]
+        public decimal? Rate { get; set; }
         [Column("brand")]
         [StringLength(100)]
         public string Brand { get; set; }
