@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Shopy.Web.Shared;
+using Shopy.Web.Interfaces;
 
 #nullable disable
 
@@ -14,7 +15,7 @@ namespace Shopy.Web.Models
     [Index(nameof(CartId), Name = "cartId")]
     [Index(nameof(ClientUsername), Name = "clientId")]
     [Index(nameof(VendorUsername), Name = "vendorId")]
-    public partial class Product
+    public partial class Product : IProduct
     {
         [Key]
         [Column("id")]
@@ -54,7 +55,7 @@ namespace Shopy.Web.Models
 
         public enum Properities { ClientUsername, Category, Model, Price, Details, ImagePath, CartId };
 
-        public static string Update(int id, dynamic value, Properities properities)
+        public string Update(int id, dynamic value, Properities properities)
         {
             bool isFound = Exist(id);
             if (!isFound) return MyExceptions.ProductNotFound(id);
@@ -78,20 +79,15 @@ namespace Shopy.Web.Models
             }
         }
 
-        public static dynamic Get(int productId)
+        public Product Get(int productId)
         {
-            bool isFound = Exist(productId);
-            if (!isFound)
-            {
-                return MyExceptions.ProductNotFound(productId);
-            }
             using (ShopyCtx db = new())
             {
                 return db.Products.FirstOrDefault(p => p.Id == productId);
             }
 
         }
-        private static bool Exist(int id)
+        public bool Exist(int id)
         {
             using (ShopyCtx db = new())
             {
@@ -99,7 +95,7 @@ namespace Shopy.Web.Models
                 return product != null;
             }
         }
-        public static string Add(Product product)
+        public string Add(Product product)
         {
             using (ShopyCtx db = new())
             {
@@ -114,12 +110,22 @@ namespace Shopy.Web.Models
             }
         }
 
-        public static List<Product> AvailableProducts()
+        public List<Product> AvailableProducts()
         {
             using (ShopyCtx db = new())
             {
                 return db.Products.Where(p => p.ClientUsername == null).ToList();
             }
+        }
+
+        public void UpdateRate(int productId, float rate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Model GetModel(int productId)
+        {
+            throw new NotImplementedException();
         }
     }
 

@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using Shopy.Web.Interfaces;
 
 #nullable disable
 
 namespace Shopy.Web.Models
 {
     [Table("models")]
-    public partial class Model
+    public partial class Model : IModel
     {
         public Model()
         {
@@ -43,5 +44,55 @@ namespace Shopy.Web.Models
 
         [InverseProperty(nameof(Product.ModelNavigation))]
         public virtual ICollection<Product> Products { get; set; }
+
+        public void AddProducts(int modelName, int qt)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int CntProducts(int modelName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public float GetRate(int modelName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateBrand(int modelName, string value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateColor(int modelName, string value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateFeatures(int modelName, string value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateImagePath(int modelName, string value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateName(int modelName, string value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdatePrice(int modelName, decimal value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateSalePrice(int modelName, decimal value)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

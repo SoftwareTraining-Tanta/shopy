@@ -1,5 +1,8 @@
 using Shopy.Web.Models;
 using Shopy.Web.Dtos;
+using System.Security.Cryptography;
+using System.Text;
+
 namespace Shopy.Web.Shared;
 public static class ExtensionMethods
 {
@@ -74,5 +77,18 @@ public static class ExtensionMethods
             Phone = clientDto.Phone,
             Username = clientDto.Username
         };
+    }
+    public static string ToSha256(this string text)
+    {
+        using (HashAlgorithm algorithm = SHA256.Create())
+        {
+            byte[] hashedText = algorithm.ComputeHash(Encoding.UTF8.GetBytes(text));
+            StringBuilder stringBuilder = new();
+            foreach (byte b in hashedText)
+            {
+                stringBuilder.Append(b.ToString("X2"));
+            }
+            return stringBuilder.ToString();
+        }
     }
 }

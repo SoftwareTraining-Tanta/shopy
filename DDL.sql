@@ -46,6 +46,7 @@ create table models
     salePrice decimal default null,
     brand     varchar(100),
     color     varchar(50),
+    rate      numeric(2, 1) default 0 check (rate between 0.0 and 5.0),
     features  varchar(600)
 );
 

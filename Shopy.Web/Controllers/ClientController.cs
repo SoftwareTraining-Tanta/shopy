@@ -17,30 +17,39 @@ public class ClientController : ControllerBase
     // {
     //     _logger = logger;
     // }
-    [HttpGet("username={username}")] // api/client/username={username}
+    [HttpGet("get/username={username}")] // api/client/username={username}
     public ClientDto Get(string username)
     {
+        Client Client = new();
         ClientDto client = Client.Get(username).AsDto();
         return client;
     }
-    [HttpGet("limit={limit:int}")]
+    [HttpGet("getlimit/limit={limit:int}")]
     public dynamic GetLimit(int limit)
     {
+        Client Client = new();
+
         return Client.AllClients(limit).AsDto();
     }
     [HttpPut("username={username}/value={value}/Properity={properity}")]
     public string update(string username, string value)
     {
+        Client Client = new();
+
         return Client.Update(username, value);
     }
     [HttpPost]
     public string Add(ClientDto client)
     {
+        Client Client = new();
+
         return Client.Add(client.AsNormal());
     }
     [HttpDelete]
     public dynamic Delete(string username)
     {
+        Client Client = new();
+
         return Client.Delete(username);
     }
     [HttpPost("signin/{username}/{password}")]
@@ -48,13 +57,15 @@ public class ClientController : ControllerBase
     {
         try
         {
+            Client Client = new();
+
             if (!Client.Exist(username))
             {
                 return NotFound(MyExceptions.ClientNotFound(username));
             }
 
             ClientDto client = Client.Get(username).AsDto();
-            if (client.Password == password)
+            if (client.Password.ToSha256() == password)
             {
                 return Ok(client.Username);
             }
@@ -65,8 +76,8 @@ public class ClientController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
-    [HttpPost("sendverification")]
-    public ActionResult SendVerification(ClientDto clientDto)
+    [HttpPost("SignUp")]
+    public ActionResult SignUp(ClientDto clientDto)
     {
         Client client = clientDto.AsNormal();
         string VerificationCode = new Random().Next(100000, 999999).ToString();
@@ -81,24 +92,29 @@ public class ClientController : ControllerBase
         {
             return BadRequest("Error sending verification code");
         }
+        Client Client = new();
+
         Client.UpdateVerificationCode(client, VerificationCode);
         Client.Add(client);
         return Ok(VerificationCode);
 
     }
-    [HttpGet("signup/{username}/{verificationCode}")]
-    public ActionResult SignUp(string username, string verificationCode)
+    [HttpGet("Verify/{username}/{verificationCode}")]
+    public ActionResult Verify(string username, string verificationCode)
     {
+        Client Client = new();
+
         Client client = Client.Get(username);
         try
         {
-            if (!Client.Exist(username))
-            {
-                return BadRequest("Please Verify your email first");
-            }
             if (client.VerificationCode != verificationCode)
             {
                 return BadRequest("Verification Code is wrong");
+            }
+            using (ShopyCtx db = new())
+            {
+                client.IsVerified = true;
+                db.SaveChanges();
             }
             return Ok(client.Username);
         }

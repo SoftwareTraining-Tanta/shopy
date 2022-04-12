@@ -3,13 +3,14 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using Shopy.Web.Shared;
+using Shopy.Web.Interfaces;
 #nullable disable
 
 namespace Shopy.Web.Models;
 
 [Table("carts")]
 [Index(nameof(ClientUsername), Name = "clientUsername")]
-public partial class Cart
+public partial class Cart : ICart
 {
     public Cart()
     {
@@ -46,34 +47,21 @@ public partial class Cart
 
     public enum Properties { Email, Phone, City, Country };
 
-    public static string Update(string clientUsername, dynamic value, Properties properity = Properties.Phone)
+    public string Update(string clientUsername, dynamic value)
     {
         bool isFound = Exist(clientUsername);
         if (!isFound) return MyExceptions.ClientNotFound(clientUsername);
         using (ShopyCtx db = new())
         {
+            Cart Cart = new();
             var cart = Cart.Get(clientUsername);
-            switch (properity)
-            {
-                case Properties.Country:
-                    if (cart != null) cart.Country = value;
-                    break;
-                case Properties.City:
-                    if (cart != null) cart.City = value;
-                    break;
-                case Properties.Email:
-                    if (cart != null) cart.Email = value;
-                    break;
-                case Properties.Phone:
-                    if (cart != null) cart.Phone = value;
-                    break;
-            }
+            cart.City = value;
             db.SaveChanges();
-            return "Updated";
+            return "Done";
         }
     }
 
-    private static bool Exist(string clientUsername)
+    public bool Exist(string clientUsername)
     {
         using (ShopyCtx db = new())
         {
@@ -81,7 +69,7 @@ public partial class Cart
             return cart != null;
         }
     }
-    public static dynamic Get(string clientUsername)
+    public dynamic Get(string clientUsername)
     {
         using (ShopyCtx db = new())
         {
@@ -93,8 +81,10 @@ public partial class Cart
             return cart;
         }
     }
-    public static int Count(string clientUsername)
+    public int Count(string clientUsername)
     {
+        Cart Cart = new();
+
         bool isFound = Cart.Exist(clientUsername);
         if (!isFound)
             return 0;
@@ -109,18 +99,18 @@ public partial class Cart
         }
     }
 
-    public static string AddToCart(string ClientUsername, int ProductId) // added by Harby at 12:00 AM
+    public void AddToCart(string ClientUsername, int ProductId) // added by Harby at 12:00 AM
     {
         using (ShopyCtx db = new())
         {
+            Product Product = new();
             var cartId = db.Carts.FirstOrDefault(c => c.ClientUsername == ClientUsername).Id;
             Product.Update(ProductId, ClientUsername, Product.Properities.ClientUsername);
             Product.Update(ProductId, cartId, Product.Properities.CartId);
-            return "successful Transactions";
         }
     }
 
-    public static decimal TotalPrice(string clientUsername)
+    public decimal TotalPrice(string clientUsername)
     {
         if (!Exist(clientUsername))
         {
@@ -132,16 +122,18 @@ public partial class Cart
         }
     }
 
-    public static string RemoveFromCart(int ProductId)
+    public string RemoveFromCart(int ProductId)
     {
         using (ShopyCtx db = new())
         {
+            Product Product = new();
+
             Product.Update(ProductId, null, Product.Properities.ClientUsername);
             Product.Update(ProductId, null, Product.Properities.CartId);
             return "Item is remove from cart";
         }
     }
-    public static string CheckOut(string clientUsername)
+    public string CheckOut(string clientUsername)
     {
         using (ShopyCtx db = new())
         {
@@ -154,13 +146,15 @@ public partial class Cart
             var cartProducs = cart.Products.ToList();
             foreach (Product p in cartProducs)
             {
+                Product Product = new();
+
                 Product.Update(p.Id, null, Product.Properities.CartId);
             }
             return "successful Transactions";
         }
     }
 
-    public static List<Product> InCart(string clientUsername)
+    public List<Product> InCart(string clientUsername)
     {
 
         using (ShopyCtx db = new())
@@ -173,4 +167,8 @@ public partial class Cart
             return cart.Products.ToList();
         }
     }
+
+
+
+
 }

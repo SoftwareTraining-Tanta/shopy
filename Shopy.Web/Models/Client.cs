@@ -2,15 +2,15 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
+using System.Security.Cryptography;
 
 using Shopy.Web.Shared;
 #nullable disable
-
+using Shopy.Web.Interfaces;
 namespace Shopy.Web.Models;
 
 [Table("clients")]
-public partial class Client
+public partial class Client : IClient
 {
     public Client()
     {
@@ -45,16 +45,20 @@ public partial class Client
     [StringLength(6)]
     public string VerificationCode { get; set; }
     [Required]
+    [Column("isVerified")]
+    public bool IsVerified { get; set; }
+    [Required]
     [Column("password")]
     [StringLength(100)]
     public string Password { get; set; }
+
 
     [InverseProperty(nameof(Cart.ClientNavigation))]
     public virtual ICollection<Cart> Carts { get; set; }
     [InverseProperty(nameof(Product.ClientNavigation))]
     public virtual ICollection<Product> Products { get; set; }
     public enum Properties { Name, Email, Phone, City, Country, Password };
-    public static string Add(Client client)
+    public string Add(Client client)
     {
         using (ShopyCtx db = new())
         {
@@ -66,6 +70,8 @@ public partial class Client
             {
                 return "Client already exists";
             }
+
+            client.Password = client.Password.ToSha256();
 
             db.Clients.Add(client);
             client.Carts.Add(
@@ -82,14 +88,14 @@ public partial class Client
             return "Done adding client";
         }
     }
-    public static Client Get(string username)
+    public Client Get(string username)
     {
         using (ShopyCtx db = new())
         {
             return db.Clients.FirstOrDefault(client => client.Username == username);
         }
     }
-    public static bool Exist(string username)
+    public bool Exist(string username)
     {
         using (ShopyCtx db = new())
         {
@@ -97,7 +103,7 @@ public partial class Client
             return client != null;
         }
     }
-    public static string Delete(string username)
+    public string Delete(string username)
     {
         var isFound = Exist(username);
         if (!isFound)
@@ -110,7 +116,7 @@ public partial class Client
         db.SaveChanges();
         return "Client Deleted";
     }
-    public static string Update(string username, dynamic value, Properties Properity = Properties.Name)
+    public string Update(string username, dynamic value, Properties Properity = Properties.Name)
     {
         bool isFound = Exist(username);
         if (!isFound) return MyExceptions.ClientNotFound(username);
@@ -145,7 +151,7 @@ public partial class Client
             return "Updated";
         }
     }
-    public static void UpdateVerificationCode(Client client, string verificationCode)
+    public void UpdateVerificationCode(Client client, string verificationCode)
     {
         using (ShopyCtx db = new())
         {
@@ -153,7 +159,7 @@ public partial class Client
             db.SaveChanges();
         }
     }
-    public static List<Client> AllClients(int limit)
+    public List<Client> AllClients(int limit)
     {
         using (ShopyCtx db = new())
         {
@@ -162,7 +168,7 @@ public partial class Client
             return new List<Client>();
         }
     }
-    public static List<Product> ClientProducts(string Username) // previously bought products
+    public List<Product> ClientProducts(string Username) // previously bought products
     {
         using (ShopyCtx db = new())
         {
@@ -177,5 +183,10 @@ public partial class Client
             // return client.Products.Where(p => p.CartId == null).ToList(); // use join
 
         }
+    }
+
+    public void UpdatePassword(string username, string new_password)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -4,19 +4,30 @@ namespace Northwind.WebApi.Controllers;
 using Shopy.Web.Models;
 using Shopy.Web.Dtos;
 using Shopy.Web.Shared;
+using Shopy.Web.Interfaces;
 
 [ApiController]
 [Route("api/carts/")]
 public class CartController : ControllerBase
 {
-    [HttpPost("{customerUsername}/{pid:int}")]
-    public string Add(string customerUsername, int pid)
+    [HttpPost("add/{customerUsername}/{pid:int}")]
+    public ActionResult Add(string customerUsername, int pid)
     {
-        return Cart.AddToCart(customerUsername, pid);
+        try
+        {
+            Cart Cart = new();
+            Cart.AddToCart(customerUsername, pid);
+            return Ok("Done adding to cart");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
-    [HttpGet("clientUsername={clientUsername}")]
+    [HttpGet("getcart/{clientUsername}")]
     public CartDto Get(string clientUsername)
     {
+        Cart Cart = new();
         Cart cart = Cart.Get(clientUsername);
         return new CartDto
         {
@@ -28,23 +39,30 @@ public class CartController : ControllerBase
         };
     }
     [HttpPut("id={id}/value={value}/Properity={properity}")]
-    public string update(string clientUsername, string value)
+    public void update(string clientUsername, string value)
     {
-        return Cart.Update(clientUsername, value);
+        Cart Cart = new();
+
+        Cart.Update(clientUsername, value);
     }
-    [HttpGet("{clientUsername}")]
+    [HttpGet("count/{clientUsername}")]
     public int GetCount(string clientUsername)
     {
+        Cart Cart = new();
         return Cart.Count(clientUsername);
     }
-    [HttpGet("totPriceByUsername={clientUsername}")]
+    [HttpGet("totalprice/{clientUsername}")]
     public decimal PriceById(string clientUsername)
     {
+        Cart Cart = new();
+
         return Cart.TotalPrice(clientUsername);
     }
-    [HttpDelete("productId={id:int}")]
+    [HttpDelete("delete/{id:int}")]
     public string Delete(int id)
     {
+        Cart Cart = new();
+
         return Cart.RemoveFromCart(id);
     }
 
