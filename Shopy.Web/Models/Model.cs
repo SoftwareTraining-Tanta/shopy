@@ -26,7 +26,11 @@ namespace Shopy.Web.Models
         [StringLength(512)]
         public string ImagePath { get; set; }
         [Column("price", TypeName = "decimal(9,2)")]
+
         public decimal Price { get; set; }
+        [Column("vendorUsername")]
+        [StringLength(30)]
+        public string VendorUsername { get; set; }
         [Column("salePrice", TypeName = "decimal(10,0)")]
 
         public decimal? SalePrice { get; set; }
@@ -44,7 +48,9 @@ namespace Shopy.Web.Models
 
         [InverseProperty(nameof(Product.ModelNavigation))]
         public virtual ICollection<Product> Products { get; set; }
-
+        [ForeignKey(nameof(VendorUsername))]
+        [InverseProperty(nameof(Vendor.Models))]
+        public virtual Vendor VendorNavigation { get; set; }
         public void AddProducts(int modelName, int qt)
         {
             throw new NotImplementedException();

@@ -69,15 +69,11 @@ public partial class Cart : ICart
             return cart != null;
         }
     }
-    public dynamic Get(string clientUsername)
+    public Cart Get(string clientUsername)
     {
         using (ShopyCtx db = new())
         {
             var cart = db.Carts.FirstOrDefault(cart => cart.ClientUsername == clientUsername);
-            if (cart == null)
-            {
-                return MyExceptions.ClientNotFound(clientUsername);
-            }
             return cart;
         }
     }
@@ -85,16 +81,9 @@ public partial class Cart : ICart
     {
         Cart Cart = new();
 
-        bool isFound = Cart.Exist(clientUsername);
-        if (!isFound)
-            return 0;
         using (ShopyCtx db = new())
         {
             var cart = db.Carts.FirstOrDefault(c => c.ClientUsername == clientUsername);
-            if (cart == null)
-            {
-                return 0;
-            }
             return db.Products.Where(p => p.CartId == cart.Id).Count();
         }
     }
@@ -105,17 +94,13 @@ public partial class Cart : ICart
         {
             Product Product = new();
             var cartId = db.Carts.FirstOrDefault(c => c.ClientUsername == ClientUsername).Id;
-            Product.Update(ProductId, ClientUsername, Product.Properities.ClientUsername);
-            Product.Update(ProductId, cartId, Product.Properities.CartId);
+            Product.UpdateClientUsername(ProductId, ClientUsername);
+            Product.UpdateCartId(ProductId, cartId);
         }
     }
 
     public decimal TotalPrice(string clientUsername)
     {
-        if (!Exist(clientUsername))
-        {
-            return 0;
-        }
         using (ShopyCtx db = new())
         {
             return db.Products.Where(p => p.ClientUsername == clientUsername).Include(p => p.ModelNavigation).Sum(p => p.ModelNavigation.Price);
@@ -128,8 +113,8 @@ public partial class Cart : ICart
         {
             Product Product = new();
 
-            Product.Update(ProductId, null, Product.Properities.ClientUsername);
-            Product.Update(ProductId, null, Product.Properities.CartId);
+            Product.UpdateClientUsername(ProductId, null);
+            Product.UpdateCartId(ProductId, null);
             return "Item is remove from cart";
         }
     }
@@ -148,7 +133,7 @@ public partial class Cart : ICart
             {
                 Product Product = new();
 
-                Product.Update(p.Id, null, Product.Properities.CartId);
+                Product.UpdateCartId(p.Id, null);
             }
             return "successful Transactions";
         }
@@ -159,11 +144,7 @@ public partial class Cart : ICart
 
         using (ShopyCtx db = new())
         {
-            var cart = db.Carts.FirstOrDefault(c => c.ClientUsername == clientUsername);
-            if (cart == null)
-            {
-                return new List<Product>();
-            }
+            var cart = db.Carts.Include(c => c.Products).FirstOrDefault(c => c.ClientUsername == clientUsername);
             return cart.Products.ToList();
         }
     }

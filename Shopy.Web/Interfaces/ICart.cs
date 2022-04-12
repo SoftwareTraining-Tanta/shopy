@@ -5,7 +5,7 @@ public interface ICart
     string Update(string clientUsername, dynamic value);
 
     bool Exist(string clientUsername);
-    dynamic Get(string clientUsername);
+    Cart Get(string clientUsername);
     int Count(string clientUsername);
     void AddToCart(string ClientUsername, int ProductId);
 

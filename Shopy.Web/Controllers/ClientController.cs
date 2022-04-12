@@ -45,7 +45,7 @@ public class ClientController : ControllerBase
 
         return Client.Add(client.AsNormal());
     }
-    [HttpDelete]
+    [HttpDelete("Delete")]
     public dynamic Delete(string username)
     {
         Client Client = new();
@@ -65,7 +65,7 @@ public class ClientController : ControllerBase
             }
 
             ClientDto client = Client.Get(username).AsDto();
-            if (client.Password.ToSha256() == password)
+            if (password.ToSha256() == client.Password)
             {
                 return Ok(client.Username);
             }

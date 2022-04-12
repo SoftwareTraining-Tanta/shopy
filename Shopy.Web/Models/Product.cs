@@ -14,16 +14,11 @@ namespace Shopy.Web.Models
     [Table("products")]
     [Index(nameof(CartId), Name = "cartId")]
     [Index(nameof(ClientUsername), Name = "clientId")]
-    [Index(nameof(VendorUsername), Name = "vendorId")]
     public partial class Product : IProduct
     {
         [Key]
         [Column("id")]
         public int Id { get; set; }
-        [Required]
-        [Column("vendorUsername")]
-        [StringLength(30)]
-        public string VendorUsername { get; set; }
         [Required]
         [Column("category")]
         [StringLength(20)]
@@ -49,33 +44,38 @@ namespace Shopy.Web.Models
         [ForeignKey(nameof(Model))]
         [InverseProperty("Products")]
         public virtual Model ModelNavigation { get; set; }
-        [ForeignKey(nameof(VendorUsername))]
-        [InverseProperty(nameof(Vendor.Products))]
-        public virtual Vendor VendorNavigation { get; set; }
+
 
         public enum Properities { ClientUsername, Category, Model, Price, Details, ImagePath, CartId };
 
-        public string Update(int id, dynamic value, Properities properities)
+        public string UpdateCartId(int id, int? value)
         {
-            bool isFound = Exist(id);
-            if (!isFound) return MyExceptions.ProductNotFound(id);
+
             using (ShopyCtx db = new())
             {
                 var product = db.Products.FirstOrDefault(p => p.Id == id);
-                switch (properities)
-                {
-                    case Properities.ClientUsername:
-                        if (product != null) product.ClientUsername = value;
-                        break;
-                    case Properities.Category:
-                        if (product != null) product.Category = value;
-                        break;
-                    case Properities.Model:
-                        if (product != null) product.Model = value;
-                        break;
-                }
+                product.CartId = value;
                 db.SaveChanges();
                 return "Updated";
+            }
+        }
+        public string UpdateClientUsername(int id, string value)
+        {
+            using (ShopyCtx db = new())
+            {
+                var product = db.Products.FirstOrDefault(p => p.Id == id);
+                product.ClientUsername = value;
+                db.SaveChanges();
+                return "Updated";
+            }
+        }
+        public Vendor GetVendor(int id)
+        {
+            using (ShopyCtx db = new())
+            {
+                var product = db.Products.Include(p => p.ModelNavigation).FirstOrDefault(p => p.Id == id);
+                var Model = db.Models.Include(m => m.VendorNavigation).FirstOrDefault(m => m.Name == product.ModelNavigation.Name);
+                return Model.VendorNavigation;
             }
         }
 

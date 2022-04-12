@@ -13,7 +13,7 @@ namespace Shopy.Web.Models
     {
         public Vendor()
         {
-            Products = new HashSet<Product>();
+            Models = new HashSet<Model>();
         }
 
         [Key]
@@ -43,8 +43,8 @@ namespace Shopy.Web.Models
         [StringLength(100)]
         public string Password { get; set; }
 
-        [InverseProperty(nameof(Product.VendorNavigation))]
-        public virtual ICollection<Product> Products { get; set; }
+        [InverseProperty(nameof(Model.VendorNavigation))]
+        public virtual ICollection<Model> Models { get; set; }
 
         public static string Add(Vendor vendor)
         {

@@ -152,3 +152,4 @@ C:/Users/younis/Desktop/pro/Shopy.Web/obj/Debug/net6.0/Shopy.Web.genruntimeconfi
 /home/mab/Desktop/SoftwareProject/shopy/Shopy.Web/obj/Debug/net6.0/Shopy.Web.pdb
 /home/mab/Desktop/SoftwareProject/shopy/Shopy.Web/obj/Debug/net6.0/Shopy.Web.genruntimeconfig.cache
 /home/mab/Desktop/SoftwareProject/shopy/Shopy.Web/obj/Debug/net6.0/ref/Shopy.Web.dll
+/home/mab/Desktop/SoftwareProject/shopy/Shopy.Web/bin/Debug/net6.0/certificate.json

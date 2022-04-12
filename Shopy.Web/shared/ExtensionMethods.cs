@@ -36,9 +36,10 @@ public static class ExtensionMethods
         {
             Category = product.Category,
             Model = product.Model,
+            VendorUsername = product.GetVendor(product.Id).Username,
         };
     }
-    public static ICollection<ProductDto> AsDto(this ICollection<Product> products)
+    public static List<ProductDto> AsDto(this ICollection<Product> products)
     {
         List<ProductDto> productDtos = new();
         foreach (Product p in products)
@@ -47,7 +48,7 @@ public static class ExtensionMethods
         }
         return productDtos;
     }
-    public static ICollection<CartDto> AsDto(this ICollection<Cart> carts)
+    public static List<CartDto> AsDto(this ICollection<Cart> carts)
     {
         List<CartDto> cartDtos = new();
         foreach (Cart c in carts)
@@ -91,4 +92,5 @@ public static class ExtensionMethods
             return stringBuilder.ToString();
         }
     }
+
 }

@@ -13,6 +13,14 @@ public class CartController : ControllerBase
     [HttpPost("add/{customerUsername}/{pid:int}")]
     public ActionResult Add(string customerUsername, int pid)
     {
+        Client client = new();
+        Product product = new();
+        if (!client.Exist(customerUsername))
+            return BadRequest(MyExceptions.ClientNotFound(customerUsername));
+
+        if (!product.Exist(pid))
+            return BadRequest(MyExceptions.ProductNotFound(pid));
+
         try
         {
             Cart Cart = new();
@@ -21,49 +29,124 @@ public class CartController : ControllerBase
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest("Error adding to cart: " + ex.Message);
         }
     }
-    [HttpGet("getcart/{clientUsername}")]
-    public CartDto Get(string clientUsername)
+    [HttpGet("get/{clientUsername}")]
+    public ActionResult Get(string clientUsername)
     {
-        Cart Cart = new();
-        Cart cart = Cart.Get(clientUsername);
-        return new CartDto
+        Client client = new();
+        if (!client.Exist(clientUsername))
         {
-            City = cart.City,
-            Country = cart.Country,
-            Email = cart.Email,
-            Phone = cart.Phone,
-            Products = Cart.InCart(clientUsername).AsDto()
-        };
-    }
-    [HttpPut("id={id}/value={value}/Properity={properity}")]
-    public void update(string clientUsername, string value)
-    {
-        Cart Cart = new();
+            return BadRequest(MyExceptions.ClientNotFound(clientUsername));
+        }
+        try
+        {
 
-        Cart.Update(clientUsername, value);
+            Cart Cart = new();
+            CartDto cart = Cart.Get(clientUsername).AsDto();
+            return Ok(cart);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest("Error getting cart " + ex.Message);
+        }
     }
-    [HttpGet("count/{clientUsername}")]
-    public int GetCount(string clientUsername)
+    [HttpPut("update/id={id}/value={value}")]
+    public ActionResult Update(string clientUsername, string value)
     {
-        Cart Cart = new();
-        return Cart.Count(clientUsername);
+        Client client = new();
+        if (!client.Exist(clientUsername))
+        {
+            return BadRequest(MyExceptions.ClientNotFound(clientUsername));
+        }
+        try
+        {
+            Cart Cart = new();
+
+            Cart.Update(clientUsername, value);
+            return Ok("Done updating cart");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest("Error updating cart: " + ex.Message);
+        }
+    }
+
+    [HttpGet("count/{clientUsername}")]
+    public ActionResult GetCount(string clientUsername)
+    {
+        Client client = new();
+        if (!client.Exist(clientUsername))
+        {
+            return BadRequest(MyExceptions.ClientNotFound(clientUsername));
+        }
+        try
+        {
+            Cart Cart = new();
+            return Ok(Cart.Count(clientUsername));
+        }
+        catch (Exception ex)
+        {
+            return BadRequest("Error getting cart count: " + ex.Message);
+        }
     }
     [HttpGet("totalprice/{clientUsername}")]
-    public decimal PriceById(string clientUsername)
+    public ActionResult PriceById(string clientUsername)
     {
-        Cart Cart = new();
-
-        return Cart.TotalPrice(clientUsername);
+        Client client = new();
+        if (!client.Exist(clientUsername))
+        {
+            return BadRequest(MyExceptions.ClientNotFound(clientUsername));
+        }
+        try
+        {
+            Cart Cart = new();
+            decimal totalPrice = Cart.TotalPrice(clientUsername);
+            return Ok(totalPrice);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest("Error getting total price: " + ex.Message);
+        }
     }
     [HttpDelete("delete/{id:int}")]
-    public string Delete(int id)
+    public ActionResult Delete(int id)
     {
-        Cart Cart = new();
-
-        return Cart.RemoveFromCart(id);
+        Product product = new();
+        if (!product.Exist(id))
+        {
+            return BadRequest("Product you want to remove from cart does not exist");
+        }
+        try
+        {
+            Cart Cart = new();
+            Cart.RemoveFromCart(id);
+            return Ok("Done deleting from cart");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest("Error removing from cart: " + ex.Message);
+        }
+    }
+    [HttpGet("InCart/{clientUsername}")]
+    public ActionResult InCart(string clientUsername)
+    {
+        Client client = new();
+        if (!client.Exist(clientUsername))
+        {
+            return BadRequest(MyExceptions.ClientNotFound(clientUsername));
+        }
+        try
+        {
+            Cart Cart = new();
+            List<ProductDto> products = Cart.InCart(clientUsername).AsDto();
+            return Ok(products);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest("Error getting products in cart: " + ex.Message);
+        }
     }
 
 
