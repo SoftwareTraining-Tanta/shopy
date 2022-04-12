@@ -1,6 +1,6 @@
 using System;
 
-namespace Shopy.Models.Dtos;
+namespace Shopy.Web.Dtos;
 #nullable disable
 public class ProductDto
 {
@@ -10,9 +10,5 @@ public class ProductDto
 
     public string Model { get; set; }
 
-    public decimal Price { get; set; }
-
-    public string Details { get; set; }
-    public string ImagePath { get; set; }
 
 }

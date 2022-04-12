@@ -1,50 +1,68 @@
 using Microsoft.AspNetCore.Mvc;
 namespace Northwind.WebApi.Controllers;
 
-using Shopy.Models;
-using Shopy.Models.Dtos;
-using Shopy.Models.Shared;
+using Shopy.Web.Models;
+using Shopy.Web.Dtos;
+using Shopy.Web.Shared;
+using Shopy.Web.Interfaces;
 
 [ApiController]
 [Route("api/carts/")]
 public class CartController : ControllerBase
 {
-    [HttpPost("{cid:int}/{pid:int}")]
-    public string Add(int cid, int pid)
+    [HttpPost("add/{customerUsername}/{pid:int}")]
+    public ActionResult Add(string customerUsername, int pid)
     {
-        return Cart.AddToCart(cid, pid);
+        try
+        {
+            Cart Cart = new();
+            Cart.AddToCart(customerUsername, pid);
+            return Ok("Done adding to cart");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
-    [HttpGet("clientId={clientId:int}")]
-    public CartDto Get(int clientId)
+    [HttpGet("getcart/{clientUsername}")]
+    public CartDto Get(string clientUsername)
     {
-        Cart cart = Cart.Get(clientId);
+        Cart Cart = new();
+        Cart cart = Cart.Get(clientUsername);
         return new CartDto
         {
             City = cart.City,
             Country = cart.Country,
             Email = cart.Email,
             Phone = cart.Phone,
-            Products = Cart.InCart(clientId).AsDto()
+            Products = Cart.InCart(clientUsername).AsDto()
         };
     }
     [HttpPut("id={id}/value={value}/Properity={properity}")]
-    public string update(int id, string value)
+    public void update(string clientUsername, string value)
     {
-        return Cart.Update(id, value);
+        Cart Cart = new();
+
+        Cart.Update(clientUsername, value);
     }
-    [HttpGet("{cntById:int}")]
-    public int GetCount(int cntById)
+    [HttpGet("count/{clientUsername}")]
+    public int GetCount(string clientUsername)
     {
-        return Cart.Count(cntById);
+        Cart Cart = new();
+        return Cart.Count(clientUsername);
     }
-    [HttpGet("totPriceById={id:int}")]
-    public decimal PriceById(int id)
+    [HttpGet("totalprice/{clientUsername}")]
+    public decimal PriceById(string clientUsername)
     {
-        return Cart.TotalPrice(id);
+        Cart Cart = new();
+
+        return Cart.TotalPrice(clientUsername);
     }
-    [HttpDelete("productId={id:int}")]
+    [HttpDelete("delete/{id:int}")]
     public string Delete(int id)
     {
+        Cart Cart = new();
+
         return Cart.RemoveFromCart(id);
     }
 

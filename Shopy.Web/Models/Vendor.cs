@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 #nullable disable
 
-namespace Shopy.Models
+namespace Shopy.Web.Models
 {
     [Table("vendors")]
     public partial class Vendor
@@ -17,8 +17,9 @@ namespace Shopy.Models
         }
 
         [Key]
-        [Column("id")]
-        public int Id { get; set; }
+        [Column("username")]
+        [StringLength(30)]
+        public string Username { get; set; }
         [Required]
         [Column("name")]
         [StringLength(30)]
@@ -42,7 +43,7 @@ namespace Shopy.Models
         [StringLength(100)]
         public string Password { get; set; }
 
-        [InverseProperty(nameof(Product.Vendor))]
+        [InverseProperty(nameof(Product.VendorNavigation))]
         public virtual ICollection<Product> Products { get; set; }
 
         public static string Add(Vendor vendor)

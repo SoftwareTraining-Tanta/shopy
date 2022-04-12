@@ -1,12 +1,16 @@
-using System.Collections.Generic;
-using Shopy.Models.Dtos;
-namespace Shopy.Models.Shared;
+using Shopy.Web.Models;
+using Shopy.Web.Dtos;
+using System.Security.Cryptography;
+using System.Text;
+
+namespace Shopy.Web.Shared;
 public static class ExtensionMethods
 {
     public static ClientDto AsDto(this Client client)
     {
         return new ClientDto
         {
+            Username = client.Username,
             Name = client.Name,
             Country = client.Country,
             City = client.City,
@@ -31,10 +35,7 @@ public static class ExtensionMethods
         return new ProductDto
         {
             Category = product.Category,
-            Details = product.Details,
-            ImagePath = product.ImagePath,
             Model = product.Model,
-            Price = product.Price
         };
     }
     public static ICollection<ProductDto> AsDto(this ICollection<Product> products)
@@ -74,6 +75,20 @@ public static class ExtensionMethods
             Email = clientDto.Email,
             Password = clientDto.Password,
             Phone = clientDto.Phone,
+            Username = clientDto.Username
         };
+    }
+    public static string ToSha256(this string text)
+    {
+        using (HashAlgorithm algorithm = SHA256.Create())
+        {
+            byte[] hashedText = algorithm.ComputeHash(Encoding.UTF8.GetBytes(text));
+            StringBuilder stringBuilder = new();
+            foreach (byte b in hashedText)
+            {
+                stringBuilder.Append(b.ToString("X2"));
+            }
+            return stringBuilder.ToString();
+        }
     }
 }

@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "Models"
+		},
+		{
+			"path": "Controllers"
+		},
+		{
+			"path": "Dtos"
+		},
+		{
+			"path": "shared"
+		},
+		{
+			"path": "Interfaces"
+		}
+	],
+	"settings": {}
+}

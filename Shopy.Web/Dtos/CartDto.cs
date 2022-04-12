@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Shopy.Models;
+using Shopy.Web.Models;
 
-namespace Shopy.Models.Dtos;
+namespace Shopy.Web.Dtos;
 #nullable disable
 public class CartDto
 {
