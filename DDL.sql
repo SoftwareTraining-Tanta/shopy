@@ -53,6 +53,7 @@ create table models
     color      varchar(50),
     features   varchar(600),
     rate       numeric(2, 1) default 0 check (rate between 0.0 and 5.0),
+    isSale     tinyint(1) default 0,
     foreign key (vendorUsername) REFERENCES vendors (username)
 );
 
