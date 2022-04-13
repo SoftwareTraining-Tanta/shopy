@@ -50,8 +50,9 @@
               "version": "[3.0.0, )"
             },
             "Microsoft.CodeAnalysis.CSharp": {
+              "suppressParent": "All",
               "target": "Package",
-              "version": "[3.8.0, )"
+              "version": "[3.9.0-2.final, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",

@@ -128,7 +128,6 @@ C:\Users\younis\Desktop\pro\Shopy.Web\obj\Debug\net6.0\Shopy.Web.MvcApplicationP
 C:\Users\younis\Desktop\pro\Shopy.Web\obj\Debug\net6.0\Shopy.Web.dll
 C:\Users\younis\Desktop\pro\Shopy.Web\obj\Debug\net6.0\ref\Shopy.Web.dll
 C:\Users\younis\Desktop\pro\Shopy.Web\obj\Debug\net6.0\Shopy.Web.pdb
-C:\Users\younis\Desktop\pro\Shopy.Web\obj\Debug\net6.0\refint\Shopy.Web.dll
 C:\Users\younis\Desktop\pro\Shopy.Web\bin\Debug\net6.0\appsettings.Development.json
 C:\Users\younis\Desktop\pro\Shopy.Web\bin\Debug\net6.0\appsettings.json
 C:\Users\younis\Desktop\pro\Shopy.Web\bin\Debug\net6.0\Shopy.Web.exe
@@ -180,3 +179,4 @@ C:\Users\younis\Desktop\pro\Shopy.Web\obj\Debug\net6.0\staticwebassets.developme
 C:\Users\younis\Desktop\pro\Shopy.Web\obj\Debug\net6.0\scopedcss\bundle\Shopy.Web.styles.css
 C:\Users\younis\Desktop\pro\Shopy.Web\obj\Debug\net6.0\Shopy.Web.csproj.CopyComplete
 C:\Users\younis\Desktop\pro\Shopy.Web\obj\Debug\net6.0\Shopy.Web.genruntimeconfig.cache
+C:\Users\younis\Desktop\pro\Shopy.Web\obj\Debug\net6.0\refint\Shopy.Web.dll

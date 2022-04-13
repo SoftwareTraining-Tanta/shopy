@@ -6,7 +6,7 @@ using Shopy.Web.Shared;
 
 namespace Northwind.WebApi.Controllers;
 
-    [Route("api/models")]
+    [Route("api/models/")]
     [ApiController]
     public class ModelController : ControllerBase
     {

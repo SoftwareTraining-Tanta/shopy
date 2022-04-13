@@ -9,8 +9,8 @@ using Shopy.Web.Interfaces;
 
 #nullable disable
 
-namespace Shopy.Web.Models
-{
+namespace Shopy.Web.Models;
+
     [Table("products")]
     [Index(nameof(CartId), Name = "cartId")]
     [Index(nameof(ClientUsername), Name = "clientId")]
@@ -99,14 +99,14 @@ namespace Shopy.Web.Models
                 var getProduct = db.Products.FirstOrDefault(v => v.Equals(product));
                 if (getProduct != null)
                 {
-                    return "Client already exists";
+                    return "Product already exists";
                 }
                 db.Products.Add(product);
                 db.SaveChanges();
-                return "Done adding client";
+                return "Done adding Product";
             }
         }
-        public void AddQuantity(Product product, int quanitity)
+        public string AddQuantity(Product product, int quanitity)
         {
             Product Product = new();
             using (ShopyCtx db = new())
@@ -117,7 +117,10 @@ namespace Shopy.Web.Models
                     db.SaveChanges();
                     product.Id++;
                 }
+
             }
+            return "Done adding Product Quantity";
+
         }
 
         public List<Product> AvailableProducts(int limit)
@@ -128,7 +131,7 @@ namespace Shopy.Web.Models
             }
         }
 
-        public void UpdateRate(int productId, decimal rate)
+        public string UpdateRate(int productId, decimal rate)
         {
             Model model = new();
             using (ShopyCtx db = new())
@@ -138,9 +141,10 @@ namespace Shopy.Web.Models
                 db.SaveChanges();
                 model.EvaluateRate(product.Model);
             }
+            return "updated Successfully";
         }
 
-        public void UpdateModel(int productId, string model)
+        public string UpdateModel(int productId, string model)
         {
             using (ShopyCtx db = new())
             {
@@ -148,6 +152,8 @@ namespace Shopy.Web.Models
                 product.Model = model;
                 db.SaveChanges();
             }
+            return "updated Successfully";
+
         }
     }
-}
+

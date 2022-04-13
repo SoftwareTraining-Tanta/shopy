@@ -38,6 +38,16 @@ public static class ExtensionMethods
             ClientUsername = product.ClientUsername
         };
     }
+    public static Product AsNormal(this ProductDto product)
+    {
+        {
+            return new Product
+            {
+                Model = product.Model,
+                ClientUsername = product.ClientUsername
+            };
+        }
+    }
     public static List<ProductDto> AsDto(this ICollection<Product> products)
     {
         List<ProductDto> productDtos = new();

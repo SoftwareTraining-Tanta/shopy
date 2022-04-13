@@ -1,13 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "gm9Xpixq7G/eraltVRuK0aPzK6vSXnF5QlcR4VfWPShEtpR1kj6dMfYuu3BBkZxbvvabJCYxIe3NyVGpbYkpkA==",
+  "dgSpecHash": "qoOcFk90Ma67LHuYeOVB8FWuaJ/yT0eOOggxTyYt4PkN7BRSfv6G/CW9z5Cf9ieN4eY4cwuFQTIEriYbCBAQfA==",
   "success": true,
   "projectFilePath": "C:\\Users\\younis\\Desktop\\pro\\Shopy.Web\\Shopy.Web.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\younis\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\younis\\.nuget\\packages\\microsoft.codeanalysis.analyzers\\3.0.0\\microsoft.codeanalysis.analyzers.3.0.0.nupkg.sha512",
-    "C:\\Users\\younis\\.nuget\\packages\\microsoft.codeanalysis.common\\3.8.0\\microsoft.codeanalysis.common.3.8.0.nupkg.sha512",
-    "C:\\Users\\younis\\.nuget\\packages\\microsoft.codeanalysis.csharp\\3.8.0\\microsoft.codeanalysis.csharp.3.8.0.nupkg.sha512",
+    "C:\\Users\\younis\\.nuget\\packages\\microsoft.codeanalysis.common\\3.9.0-2.final\\microsoft.codeanalysis.common.3.9.0-2.final.nupkg.sha512",
+    "C:\\Users\\younis\\.nuget\\packages\\microsoft.codeanalysis.csharp\\3.9.0-2.final\\microsoft.codeanalysis.csharp.3.9.0-2.final.nupkg.sha512",
     "C:\\Users\\younis\\.nuget\\packages\\microsoft.entityframeworkcore\\6.0.0\\microsoft.entityframeworkcore.6.0.0.nupkg.sha512",
     "C:\\Users\\younis\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\6.0.0\\microsoft.entityframeworkcore.abstractions.6.0.0.nupkg.sha512",
     "C:\\Users\\younis\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\6.0.0\\microsoft.entityframeworkcore.analyzers.6.0.0.nupkg.sha512",
