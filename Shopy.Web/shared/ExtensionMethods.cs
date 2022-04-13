@@ -34,9 +34,8 @@ public static class ExtensionMethods
     {
         return new ProductDto
         {
-            Category = product.Category,
             Model = product.Model,
-            VendorUsername = product.GetVendor(product.Id).Username,
+            ClientUsername = product.ClientUsername
         };
     }
     public static List<ProductDto> AsDto(this ICollection<Product> products)

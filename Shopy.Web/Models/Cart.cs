@@ -47,17 +47,22 @@ public partial class Cart : ICart
 
     public enum Properties { Email, Phone, City, Country };
 
-    public string Update(string clientUsername, dynamic value)
+    public void UpdateCity(string clientUsername, string value)
     {
-        bool isFound = Exist(clientUsername);
-        if (!isFound) return MyExceptions.ClientNotFound(clientUsername);
         using (ShopyCtx db = new())
         {
-            Cart Cart = new();
-            var cart = Cart.Get(clientUsername);
+            Cart cart = db.Carts.FirstOrDefault(c => c.ClientUsername == clientUsername);
             cart.City = value;
             db.SaveChanges();
-            return "Done";
+        }
+    }
+    public void UpdatePhone(string clientUsername, string value)
+    {
+        using (ShopyCtx db = new())
+        {
+            Cart cart = db.Carts.FirstOrDefault(c => c.ClientUsername == clientUsername);
+            cart.Phone = value;
+            db.SaveChanges();
         }
     }
 
@@ -65,7 +70,7 @@ public partial class Cart : ICart
     {
         using (ShopyCtx db = new())
         {
-            var cart = db.Carts.FirstOrDefault(c => c.ClientUsername == clientUsername);
+            Cart cart = db.Carts.FirstOrDefault(c => c.ClientUsername == clientUsername);
             return cart != null;
         }
     }
@@ -73,7 +78,7 @@ public partial class Cart : ICart
     {
         using (ShopyCtx db = new())
         {
-            var cart = db.Carts.FirstOrDefault(cart => cart.ClientUsername == clientUsername);
+            Cart cart = db.Carts.FirstOrDefault(cart => cart.ClientUsername == clientUsername);
             return cart;
         }
     }
@@ -83,7 +88,7 @@ public partial class Cart : ICart
 
         using (ShopyCtx db = new())
         {
-            var cart = db.Carts.FirstOrDefault(c => c.ClientUsername == clientUsername);
+            Cart cart = db.Carts.FirstOrDefault(c => c.ClientUsername == clientUsername);
             return db.Products.Where(p => p.CartId == cart.Id).Count();
         }
     }
@@ -93,7 +98,7 @@ public partial class Cart : ICart
         using (ShopyCtx db = new())
         {
             Product Product = new();
-            var cartId = db.Carts.FirstOrDefault(c => c.ClientUsername == ClientUsername).Id;
+            int cartId = db.Carts.FirstOrDefault(c => c.ClientUsername == ClientUsername).Id;
             Product.UpdateClientUsername(ProductId, ClientUsername);
             Product.UpdateCartId(ProductId, cartId);
         }
@@ -103,7 +108,10 @@ public partial class Cart : ICart
     {
         using (ShopyCtx db = new())
         {
-            return db.Products.Where(p => p.ClientUsername == clientUsername).Include(p => p.ModelNavigation).Sum(p => p.ModelNavigation.Price);
+            return db.Products
+            .Where(p => p.ClientUsername == clientUsername)
+            .Include(p => p.ModelNavigation)
+            .Sum(p => p.ModelNavigation.Price);
         }
     }
 
@@ -122,17 +130,11 @@ public partial class Cart : ICart
     {
         using (ShopyCtx db = new())
         {
-            var cart = db.Carts.FirstOrDefault(c => c.ClientUsername == clientUsername);
-            if (cart == null)
-            {
-                // No exceptions for the client, no cart -> no client
-                return MyExceptions.ClientNotFound(clientUsername);
-            }
-            var cartProducs = cart.Products.ToList();
+            Cart cart = db.Carts.Include(c => c.Products).FirstOrDefault(c => c.ClientUsername == clientUsername);
+            List<Product> cartProducs = cart.Products.ToList();
             foreach (Product p in cartProducs)
             {
                 Product Product = new();
-
                 Product.UpdateCartId(p.Id, null);
             }
             return "successful Transactions";
@@ -144,7 +146,7 @@ public partial class Cart : ICart
 
         using (ShopyCtx db = new())
         {
-            var cart = db.Carts.Include(c => c.Products).FirstOrDefault(c => c.ClientUsername == clientUsername);
+            Cart cart = db.Carts.Include(c => c.Products).FirstOrDefault(c => c.ClientUsername == clientUsername);
             return cart.Products.ToList();
         }
     }

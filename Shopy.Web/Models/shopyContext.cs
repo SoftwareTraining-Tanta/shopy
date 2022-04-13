@@ -61,8 +61,6 @@ new MySqlServerVersion(new Version(10, 4, 17)));
 
             modelBuilder.Entity<Product>(entity =>
             {
-                entity.Property(e => e.Rate).HasDefaultValueSql("'0.0'");
-
                 entity.HasOne(d => d.Cart)
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.CartId)
@@ -78,6 +76,7 @@ new MySqlServerVersion(new Version(10, 4, 17)));
                     .HasForeignKey(d => d.Model)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("products_ibfk_4");
+
             });
 
             modelBuilder.Entity<Vendor>(entity =>

@@ -52,7 +52,7 @@ public class CartController : ControllerBase
             return BadRequest("Error getting cart " + ex.Message);
         }
     }
-    [HttpPut("update/id={id}/value={value}")]
+    [HttpPut("updateCity/id={id}/value={value}")]
     public ActionResult Update(string clientUsername, string value)
     {
         Client client = new();
@@ -63,8 +63,7 @@ public class CartController : ControllerBase
         try
         {
             Cart Cart = new();
-
-            Cart.Update(clientUsername, value);
+            Cart.UpdateCity(clientUsername, value);
             return Ok("Done updating cart");
         }
         catch (Exception ex)
@@ -146,6 +145,25 @@ public class CartController : ControllerBase
         catch (Exception ex)
         {
             return BadRequest("Error getting products in cart: " + ex.Message);
+        }
+    }
+    [HttpPut("checkout/{clientUsername}")]
+    public ActionResult CheckOut(string clientUsername)
+    {
+        Client client = new();
+        if (!client.Exist(clientUsername))
+        {
+            return BadRequest(MyExceptions.ClientNotFound(clientUsername));
+        }
+        try
+        {
+            Cart Cart = new();
+            Cart.CheckOut(clientUsername);
+            return Ok("Done checking out");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest("Error checking out: " + ex.Message);
         }
     }
 

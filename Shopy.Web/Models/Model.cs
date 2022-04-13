@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using Shopy.Web.Interfaces;
@@ -39,66 +37,190 @@ namespace Shopy.Web.Models
         [Column("brand")]
         [StringLength(100)]
         public string Brand { get; set; }
+        [Required]
+        [Column("category")]
+        [StringLength(20)]
+        public string Category { get; set; }
         [Column("color")]
         [StringLength(50)]
         public string Color { get; set; }
         [Column("features")]
         [StringLength(600)]
         public string Features { get; set; }
+        public bool IsSale { get; set; }
 
         [InverseProperty(nameof(Product.ModelNavigation))]
         public virtual ICollection<Product> Products { get; set; }
         [ForeignKey(nameof(VendorUsername))]
         [InverseProperty(nameof(Vendor.Models))]
         public virtual Vendor VendorNavigation { get; set; }
-        public void AddProducts(int modelName, int qt)
+
+
+        public void AddModelWithProducts(Model model, int qt)
         {
-            throw new NotImplementedException();
+            Product Product = new Product();
+            using (ShopyCtx db = new())
+            {
+                db.Models.Add(model);
+                db.SaveChanges();
+            }
+            Product product = new();
+            product.Model = model.Name;
+            product.AddQuantity(product, qt);
         }
 
-        public int CntProducts(int modelName)
+
+
+        public int CntProducts(string modelName)
         {
-            throw new NotImplementedException();
+            using (ShopyCtx db = new())
+            {
+                int count = db.Products.Where(p => p.Model == modelName).Count();
+                return count;
+            }
         }
 
-        public float GetRate(int modelName)
+        public void EvaluateRate(string modelName)
         {
-            throw new NotImplementedException();
+            using (ShopyCtx db = new())
+            {
+                List<Product> ratedProducts = db.Products.Where(p => (p.Model == modelName && p.Rate != null)).ToList();
+                decimal? sum = 0;
+                foreach (Product p in ratedProducts)
+                {
+                    sum += p.Rate;
+                }
+                decimal? avg = sum / ratedProducts.Count;
+                Model model = db.Models.FirstOrDefault(m => m.Name == modelName);
+                model.Rate = avg;
+                db.SaveChanges();
+            }
         }
 
-        public void UpdateBrand(int modelName, string value)
+        public Model Get(string name)
         {
-            throw new NotImplementedException();
+            using (ShopyCtx db = new())
+            {
+                return db.Models.FirstOrDefault(m => m.Name == name);
+            }
         }
 
-        public void UpdateColor(int modelName, string value)
+        public void UpdateBrand(string modelName, string value)
         {
-            throw new NotImplementedException();
+            using (ShopyCtx db = new())
+            {
+                Model model = db.Models.FirstOrDefault(m => m.Name == modelName);
+                model.Brand = value;
+                db.SaveChanges();
+            }
         }
 
-        public void UpdateFeatures(int modelName, string value)
+        public int AvailableProducts(string modelName)
         {
-            throw new NotImplementedException();
+            int count = 0;
+            using (ShopyCtx db = new())
+            {
+                Model model = db.Models.Include(m => m.Products).FirstOrDefault(m => m.Name == modelName);
+                count = model.Products.Where(p => p.ClientUsername == null).Count();
+                return count;
+            }
+        }
+        public List<Model> GetAllOrderedbySale(int limit)
+        {
+            using (ShopyCtx db = new())
+            {
+                List<Model> models = db.Models
+                .OrderByDescending(m => m.IsSale)
+                .ThenByDescending(m => m.Rate)
+                .Take(limit).ToList();
+                return models;
+            }
+        }
+        public List<Model> GetAllOrderedbyRate(int limit)
+        {
+            using (ShopyCtx db = new())
+            {
+                List<Model> models = db.Models
+                .OrderByDescending(m => m.Rate)
+                .ThenByDescending(m => m.IsSale)
+                .Take(limit).ToList();
+                return models;
+            }
+        }
+        public void DeleteModel(string modelName)
+        {
+            Model model = new();
+            model = model.Get(modelName);
+            using (ShopyCtx db = new())
+            {
+                db.Models.Remove(model);
+                db.SaveChanges();
+            }
+        }
+        public void UpdateColor(string modelName, string value)
+        {
+            using (ShopyCtx db = new())
+            {
+                Model model = db.Models.FirstOrDefault(m => m.Name == modelName);
+                model.Color = value;
+                db.SaveChanges();
+            }
+        }
+        public void UpdateFeatures(string modelName, string value)
+        {
+            using (ShopyCtx db = new())
+            {
+                Model model = db.Models.FirstOrDefault(m => m.Name == modelName);
+                model.Features = value;
+                db.SaveChanges();
+            }
+        }
+        public void UpdateImagePath(string modelName, string value)
+        {
+            using (ShopyCtx db = new())
+            {
+                Model model = db.Models.FirstOrDefault(m => m.Name == modelName);
+                model.ImagePath = value;
+                db.SaveChanges();
+            }
         }
 
-        public void UpdateImagePath(int modelName, string value)
+        public void UpdateIsSale(string modelName, bool value)
         {
-            throw new NotImplementedException();
+            using (ShopyCtx db = new())
+            {
+                Model model = db.Models.FirstOrDefault(m => m.Name == modelName);
+                model.IsSale = value;
+                db.SaveChanges();
+            }
         }
 
-        public void UpdateName(int modelName, string value)
+        public void UpdateName(string modelName, string value)
         {
-            throw new NotImplementedException();
+            using (ShopyCtx db = new())
+            {
+                Model model = db.Models.FirstOrDefault(m => m.Name == modelName);
+                model.Name = value;
+                db.SaveChanges();
+            }
         }
-
-        public void UpdatePrice(int modelName, decimal value)
+        public void UpdatePrice(string modelName, decimal value)
         {
-            throw new NotImplementedException();
+            using (ShopyCtx db = new())
+            {
+                Model model = db.Models.FirstOrDefault(m => m.Name == modelName);
+                model.Price = value;
+                db.SaveChanges();
+            }
         }
-
-        public void UpdateSalePrice(int modelName, decimal value)
+        public void UpdateSalePrice(string modelName, decimal value)
         {
-            throw new NotImplementedException();
+            using (ShopyCtx db = new())
+            {
+                Model model = db.Models.FirstOrDefault(m => m.Name == modelName);
+                model.SalePrice = value;
+                db.SaveChanges();
+            }
         }
     }
 }

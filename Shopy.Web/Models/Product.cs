@@ -19,10 +19,7 @@ namespace Shopy.Web.Models
         [Key]
         [Column("id")]
         public int Id { get; set; }
-        [Required]
-        [Column("category")]
-        [StringLength(20)]
-        public string Category { get; set; }
+
         [Required]
         [Column("model")]
         [StringLength(300)]
@@ -83,7 +80,7 @@ namespace Shopy.Web.Models
         {
             using (ShopyCtx db = new())
             {
-                return db.Products.FirstOrDefault(p => p.Id == productId);
+                return db.Products.Include(p => p.ModelNavigation).FirstOrDefault(p => p.Id == productId);
             }
 
         }
@@ -109,24 +106,48 @@ namespace Shopy.Web.Models
                 return "Done adding client";
             }
         }
-
-        public List<Product> AvailableProducts()
+        public void AddQuantity(Product product, int quanitity)
         {
+            Product Product = new();
             using (ShopyCtx db = new())
             {
-                return db.Products.Where(p => p.ClientUsername == null).ToList();
+                for (int i = 0; i < quanitity; i++)
+                {
+                    db.Products.Add(product);
+                    db.SaveChanges();
+                    product.Id++;
+                }
             }
         }
 
-        public void UpdateRate(int productId, float rate)
+        public List<Product> AvailableProducts(int limit)
         {
-            throw new NotImplementedException();
+            using (ShopyCtx db = new())
+            {
+                return db.Products.Where(p => p.ClientUsername == null).Take(limit).ToList();
+            }
         }
 
-        public Model GetModel(int productId)
+        public void UpdateRate(int productId, decimal rate)
         {
-            throw new NotImplementedException();
+            Model model = new();
+            using (ShopyCtx db = new())
+            {
+                var product = db.Products.FirstOrDefault(p => p.Id == productId);
+                product.Rate = rate;
+                db.SaveChanges();
+                model.EvaluateRate(product.Model);
+            }
+        }
+
+        public void UpdateModel(int productId, string model)
+        {
+            using (ShopyCtx db = new())
+            {
+                var product = db.Products.FirstOrDefault(p => p.Id == productId);
+                product.Model = model;
+                db.SaveChanges();
+            }
         }
     }
-
 }
