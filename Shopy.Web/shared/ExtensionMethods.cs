@@ -162,6 +162,23 @@ public static class ExtensionMethods
         };
 
     }
+    public static Model AsNormal(this ModelDto model)
+    {
+        return new Model
+        {
+            Brand = model.Brand,
+            Category = model.Category,
+            Color = model.Color,
+            Features = model.Features,
+            ImagePath = model.ImagePath,
+            Name = model.Name,
+            Price = model.Price,
+            Rate = model.Rate,
+            SalePrice = model.SalePrice,
+            VendorUsername = model.VendorUsername,
+        };
+
+    }
     public static List<ModelDto> AsDto(this ICollection<Model> models)
     {
         List<ModelDto> modelDtos = new();

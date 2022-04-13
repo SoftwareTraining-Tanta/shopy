@@ -12,34 +12,122 @@ namespace Northwind.WebApi.Controllers;
     {
         // GET: api/<ModelController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public ModelDto Get(string name)
         {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<ModelController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<ModelController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
+        Model model = new();
+        ModelDto _model = model.Get(name).AsDto();
+        return _model;
         }
 
         // PUT api/<ModelController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("updatename/modelname={modelName}/value={value}")]
+        public void UpdateName(string modelName,string value)
         {
+        Model model = new();
+        model.UpdateName(modelName, value);
+
+        }
+    [HttpPut("updateimage/modelname={modelName}/value={value}")]
+    public void UpdateImagePath(string modelName, string value)
+    {
+        Model model = new();
+        model.UpdateImagePath(modelName, value);
+
+    }
+    [HttpPut("updateprice/modelname={modelName}/value={value}")]
+    public void UpdatePrice(string modelName, decimal value)
+    {
+        Model model = new();
+        model.UpdatePrice(modelName, value);
+
+    }
+    [HttpPut("updateSalePrice/modelname={modelName}/value={value}")]
+    public void UpdateSalePrice(string modelName, decimal value)
+    {
+        Model model = new();
+        model.UpdateSalePrice(modelName, value);
+
+    }
+    [HttpPut("updateBrand/modelname={modelName}/value={value}")]
+    public void UpdateBrand(string modelName, string value)
+    {
+        Model model = new();
+        model.UpdateBrand(modelName, value);
+
+    }
+    [HttpPut("updateColor/modelname={modelName}/value={value}")]
+    public void UpdateColor(string modelName, string value)
+    {
+        Model model = new();
+        model.UpdateColor(modelName, value);
+
+    }
+    [HttpPut("updateFeatures/modelname={modelName}/value={value}")]
+    public void UpdateFeatures(string modelName, string value)
+    {
+        Model model = new();
+        model.UpdateFeatures(modelName, value);
+
+    }
+    // POST api/<ModelController>
+    [HttpGet("count/")]
+        public int count(string modelName)
+        {
+        Model model = new();
+        return model.CntProducts(modelName);
         }
 
-        // DELETE api/<ModelController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+
+        // PUT api/<ModelController>/5
+        [HttpPost("addWithproducts/quntity={number}")]
+        public void AddModelWithProducts(ModelDto model, int number)
         {
+        Model _model = new Model();
+        _model.AddModelWithProducts(model.AsNormal(), number);
+
+        }
+        [HttpGet("EvaluateRate/")]
+        public string EvaluateRate(string modelName)
+    {
+        Model model = new();
+        return model.EvaluateRate(modelName);
+        
+    }
+    [HttpPut("UpdateIsSale/{modelName}/{value}")]
+    public void UpdateIsSale(string modelName,bool value)
+    {
+        Model model = new();
+        model.UpdateIsSale(modelName,value);
+
+    }
+
+    [HttpGet("AvailableProducts/{modelName}/")]
+    public int UpdateIsSale(string modelName)
+    {
+        Model model = new();
+        return model.AvailableProducts(modelName);
+
+    }
+    [HttpGet("GetAllOrderdBySale/{limit}/")]
+    public List<ModelDto> GetAllOrderBySale(int limit)
+    {
+        Model model = new();
+        return model.GetAllOrderedbySale(limit).AsDto();
+
+    }
+    [HttpGet("GetAllOrderdByRate/{limit}/")]
+    public List<ModelDto> GetAllOrderByRate(int limit)
+    {
+        Model model = new();
+        return model.GetAllOrderedbyRate(limit).AsDto();
+
+    }
+    // DELETE api/<ModelController>/5
+    [HttpDelete("Delete/{modelName}")]
+        public void Delete(string modelName)
+        {
+        Model model = new();
+        model.DeleteModel(modelName);
         }
     }
 

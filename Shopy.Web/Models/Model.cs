@@ -80,7 +80,7 @@ namespace Shopy.Web.Models
             }
         }
 
-        public void EvaluateRate(string modelName)
+        public string EvaluateRate(string modelName)
         {
             using (ShopyCtx db = new())
             {
@@ -95,6 +95,7 @@ namespace Shopy.Web.Models
                 model.Rate = avg;
                 db.SaveChanges();
             }
+            return "Evaluation Done";
         }
 
         public Model Get(string name)
