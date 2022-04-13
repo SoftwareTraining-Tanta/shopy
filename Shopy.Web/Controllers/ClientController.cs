@@ -32,7 +32,7 @@ public class ClientController : ControllerBase
         return Client.AllClients(limit).AsDto();
     }
     [HttpPut("username={username}/value={value}/Properity={properity}")]
-    public string update(string username, string value)
+    public string Update(string username, string value)
     {
         Client Client = new();
 

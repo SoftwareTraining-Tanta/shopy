@@ -47,6 +47,7 @@ public static class ExtensionMethods
         }
         return productDtos;
     }
+
     public static List<CartDto> AsDto(this ICollection<Cart> carts)
     {
         List<CartDto> cartDtos = new();
@@ -90,6 +91,75 @@ public static class ExtensionMethods
             }
             return stringBuilder.ToString();
         }
+    }
+    public static VendorDto AsDto(this Vendor vendor)
+    {
+        return new VendorDto
+        {
+            Name = vendor.Name,
+            City = vendor.City,
+            Country = vendor.Country,
+            Email = vendor.Email,
+            IsVerified = vendor.IsVerified,
+            Models = (ICollection<Model>)vendor.Models.AsDto(),
+            Password = vendor.Password,
+            Phone = vendor.Phone,
+            Username = vendor.Username,
+
+        };
+
+    }
+    public static List<VendorDto> AsDto(this ICollection<Vendor> vendors)
+    {
+        List<VendorDto> vendorDtos = new();
+        foreach (Vendor _vendor in vendors)
+        {
+            vendorDtos.Add(_vendor.AsDto());
+        }
+        return vendorDtos;
+    }
+    public static Vendor AsNormal(this VendorDto vendor)
+    {
+        return new Vendor 
+        {
+        
+            Name = vendor.Name,
+            City = vendor.City,
+            Country = vendor.Country,
+            Email = vendor.Email,
+            IsVerified = vendor.IsVerified,
+            Models = (ICollection<Model>)vendor.Models.AsDto(),
+            Password = vendor.Password,
+            Phone = vendor.Phone,
+            Username = vendor.Username,
+
+        };
+    }
+    public static ModelDto AsDto(this Model model)
+    {
+        return new ModelDto
+        {
+           Brand = model.Brand,
+           Category=model.Category,
+           Color = model.Color,
+           Features = model.Features,
+           ImagePath = model.ImagePath,
+           Name = model.Name,
+           Price = model.Price,
+           Rate=model.Rate,
+           SalePrice=model.SalePrice,
+           VendorUsername=model.VendorUsername,
+        };
+
+    }
+    public static List<ModelDto> AsDto(this ICollection<Model> models)
+    {
+        List<ModelDto> modelDtos = new();
+        foreach (Model _model in models)
+        {
+            modelDtos.Add(_model.AsDto());
+        }
+        return modelDtos;
     }
 
 }

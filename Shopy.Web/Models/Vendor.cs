@@ -54,13 +54,14 @@ namespace Shopy.Web.Models
         [InverseProperty(nameof(Model.VendorNavigation))]
         public virtual ICollection<Model> Models { get; set; }
 
-        public void Add(Vendor vendor)
+        public string Add(Vendor vendor)
         {
             using (ShopyCtx db = new())
             {
                 db.Vendors.Add(vendor);
                 db.SaveChanges();
             }
+            return "Vendor Added Successfully";
         }
 
         public List<Vendor> AllVendors(int limit)
@@ -71,7 +72,7 @@ namespace Shopy.Web.Models
             }
         }
 
-        public void Delete(string username)
+        public string  Delete(string username)
         {
             using (ShopyCtx db = new())
             {
@@ -79,6 +80,7 @@ namespace Shopy.Web.Models
                 db.Vendors.Remove(vendor);
                 db.SaveChanges();
             }
+            return "Vendor Deleted Successfully";
         }
 
         public bool Exist(string username)
@@ -99,7 +101,7 @@ namespace Shopy.Web.Models
             }
         }
 
-        public void UpdatePassword(string username, string newPassword)
+        public string UpdatePassword(string username, string newPassword)
         {
             using (ShopyCtx db = new())
             {
@@ -107,9 +109,10 @@ namespace Shopy.Web.Models
                 vendor.Password = newPassword;
                 db.SaveChanges();
             }
+            return "password is  updated successfully";
         }
 
-        public void UpdateVerificationCode(string username, string verificationCode)
+        public string UpdateVerificationCode(string username, string verificationCode)
         {
             using (ShopyCtx db = new())
             {
@@ -117,6 +120,8 @@ namespace Shopy.Web.Models
                 vendor.VerificationCode = verificationCode;
                 db.SaveChanges();
             }
+            return "Verification code is updated successfully";
+
         }
 
         public List<Model> VendorModels(string Username)
