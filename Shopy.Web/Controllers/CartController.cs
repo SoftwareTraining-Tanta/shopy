@@ -185,6 +185,4 @@ public class CartController : ControllerBase
             return BadRequest("Error removing from cart: " + ex.Message);
         }
     }
-
-
 }

@@ -11,7 +11,7 @@ namespace Northwind.WebApi.Controllers;
 public class ModelController : ControllerBase
 {
     // GET: api/<ModelController>
-    [HttpGet]
+    [HttpGet("Get/{name}")]
     public ModelDto Get(string name)
     {
         Model model = new();

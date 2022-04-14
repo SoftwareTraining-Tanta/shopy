@@ -128,17 +128,19 @@ public partial class Cart : ICart
     }
     public string CheckOut(string clientUsername)
     {
+        List<Product> cartProducts = new();
         using (ShopyCtx db = new())
         {
             Cart cart = db.Carts.Include(c => c.Products).FirstOrDefault(c => c.ClientUsername == clientUsername);
-            List<Product> cartProducs = cart.Products.ToList();
-            foreach (Product p in cartProducs)
-            {
-                Product Product = new();
-                Product.UpdateCartId(p.Id, null);
-            }
-            return "successful Transactions";
+            cartProducts = cart.Products.ToList();
+
         }
+        foreach (Product p in cartProducts)
+        {
+            Product Product = new();
+            Product.UpdateCartId(p.Id, null);
+        }
+        return "successful Transactions";
     }
 
     public List<Product> InCart(string clientUsername)
@@ -147,7 +149,7 @@ public partial class Cart : ICart
         using (ShopyCtx db = new())
         {
             Cart cart = db.Carts.Include(c => c.Products).FirstOrDefault(c => c.ClientUsername == clientUsername);
-            return cart.Products.ToList();
+            return cart.Products.Where(p => p.CartId == cart.Id && p.ClientUsername == clientUsername).ToList();
         }
     }
 
