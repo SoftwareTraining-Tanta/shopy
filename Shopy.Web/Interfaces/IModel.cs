@@ -5,7 +5,7 @@ public interface IModel
 {
     Model Get(string name);
     void UpdateName(string modelName, string value);
-    void UpdateImagePath(string modelName, string value);
+    string UpdateImagePath(string modelName, string value);
     void UpdatePrice(string modelName, decimal value);
     void UpdateSalePrice(string modelName, decimal value);
     void UpdateBrand(string modelName, string value);

@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Shopy.Web.Interfaces;
+using Shopy.Web.Shared;
 #nullable disable
 
 namespace Shopy.Web.Models
@@ -58,6 +59,13 @@ namespace Shopy.Web.Models
         {
             using (ShopyCtx db = new())
             {
+                var getVendor = db.Vendors.FirstOrDefault(cl => cl.Equals(vendor));
+                if (getVendor != null)
+                {
+                    return "Vendor already exists";
+                }
+                vendor.Password = vendor.Password.ToSha256();
+
                 db.Vendors.Add(vendor);
                 db.SaveChanges();
             }
@@ -74,6 +82,9 @@ namespace Shopy.Web.Models
 
         public string  Delete(string username)
         {
+            var isFound = Exist(username);
+            if (!isFound)
+                return MyExceptions.VendorNotFound(username);
             using (ShopyCtx db = new())
             {
                 Vendor vendor = db.Vendors.FirstOrDefault(v => v.Username == username);
@@ -103,20 +114,23 @@ namespace Shopy.Web.Models
 
         public string UpdatePassword(string username, string newPassword)
         {
+            var isFound = Exist(username);
+            if (!isFound)
+                return MyExceptions.VendorNotFound(username);
             using (ShopyCtx db = new())
             {
                 Vendor vendor = db.Vendors.FirstOrDefault(v => v.Username == username);
-                vendor.Password = newPassword;
+                vendor.Password = newPassword.ToSha256();
                 db.SaveChanges();
             }
             return "password is  updated successfully";
         }
 
-        public string UpdateVerificationCode(string username, string verificationCode)
+        public string UpdateVerificationCode(Vendor vendor, string verificationCode)
         {
+
             using (ShopyCtx db = new())
             {
-                Vendor vendor = db.Vendors.FirstOrDefault(v => v.Username == username);
                 vendor.VerificationCode = verificationCode;
                 db.SaveChanges();
             }
@@ -128,10 +142,13 @@ namespace Shopy.Web.Models
         {
             using (ShopyCtx db = new())
             {
-                return db.Models
+                var models= db.Models
                 .Include(m => m.VendorNavigation)
                 .Where(m => m.VendorNavigation.Username == Username)
                 .ToList();
+
+                if (models != null) return models;
+                return new List<Model>();
             }
         }
         public Dictionary<string, int> ProductCountPerModel(string username)
@@ -146,20 +163,6 @@ namespace Shopy.Web.Models
                 dict[model1.Name] = model1.AvailableProducts(model1.Name);
             }
             return dict;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

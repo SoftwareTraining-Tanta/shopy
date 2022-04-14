@@ -176,7 +176,7 @@ namespace Shopy.Web.Models
                 db.SaveChanges();
             }
         }
-        public void UpdateImagePath(string modelName, string value)
+        public string UpdateImagePath(string modelName, string value)
         {
             using (ShopyCtx db = new())
             {
@@ -184,6 +184,7 @@ namespace Shopy.Web.Models
                 model.ImagePath = value;
                 db.SaveChanges();
             }
+            return value;
         }
 
         public void UpdateIsSale(string modelName, bool value)

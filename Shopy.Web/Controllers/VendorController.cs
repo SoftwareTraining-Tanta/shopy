@@ -36,8 +36,11 @@ namespace Northwind.WebApi.Controllers;
         [HttpPut("updateVCode/username={username}/value={value}")]
         public string UpdateVerificationCode(string username, string value)
         {
-            Vendor vendor = new();
-            return vendor.UpdateVerificationCode(username, value);
+        Vendor vendor = new();
+         vendor=vendor.Get(username);
+
+            
+            return vendor.UpdateVerificationCode(vendor, value);
 
         }
         // POST api/<VendorController>
@@ -64,7 +67,7 @@ namespace Northwind.WebApi.Controllers;
 
                 if (!_vendor.Exist(username))
                 {
-                    return NotFound(MyExceptions.ClientNotFound(username));
+                    return NotFound(MyExceptions.VendorNotFound(username));
                 }
 
                 VendorDto vendor = _vendor.Get(username).AsDto();
@@ -72,7 +75,7 @@ namespace Northwind.WebApi.Controllers;
                 {
                     return Ok(vendor.Username);
                 }
-                return BadRequest("Wrong password");
+                return BadRequest("Wrong password ");
             }
             catch (Exception ex)
             {
@@ -97,7 +100,7 @@ namespace Northwind.WebApi.Controllers;
             }
             Vendor _vendor = new();
 
-            _vendor.UpdateVerificationCode(vendor.Username, VerificationCode);
+            _vendor.UpdateVerificationCode(vendor, VerificationCode);
             _vendor.Add(vendor);
             return Ok(VerificationCode);
 

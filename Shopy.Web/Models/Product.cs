@@ -51,6 +51,9 @@ namespace Shopy.Web.Models;
             using (ShopyCtx db = new())
             {
                 var product = db.Products.FirstOrDefault(p => p.Id == id);
+            var cart = db.Carts.FirstOrDefault(c => c.Id == value);
+            if (cart==null) return "cart is not existed";
+
                 product.CartId = value;
                 db.SaveChanges();
                 return "Updated";
@@ -61,7 +64,10 @@ namespace Shopy.Web.Models;
             using (ShopyCtx db = new())
             {
                 var product = db.Products.FirstOrDefault(p => p.Id == id);
-                product.ClientUsername = value;
+            var client = db.Clients.FirstOrDefault(c => c.Username == value);
+            if (client == null) return "client is not existed";
+
+            product.ClientUsername = value;
                 db.SaveChanges();
                 return "Updated";
             }
@@ -79,8 +85,11 @@ namespace Shopy.Web.Models;
         public Product Get(int productId)
         {
             using (ShopyCtx db = new())
-            {
-                return db.Products.Include(p => p.ModelNavigation).FirstOrDefault(p => p.Id == productId);
+            {   
+                var  product= db.Products.Include(p => p.ModelNavigation).FirstOrDefault(p => p.Id == productId);
+                if (product== null) return new Product();
+                return product;
+
             }
 
         }

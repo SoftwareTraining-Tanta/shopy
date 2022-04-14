@@ -22,10 +22,7 @@ namespace Shopy.Web.Dtos;
 
         public string Password { get; set; }
  
-        public string VerificationCode { get; set; }
 
-        public bool IsVerified { get; set; }
-        public virtual ICollection<Model> Models { get; set; }
 
     }
 

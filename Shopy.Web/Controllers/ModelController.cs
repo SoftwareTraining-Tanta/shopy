@@ -28,10 +28,10 @@ namespace Northwind.WebApi.Controllers;
 
         }
     [HttpPut("updateimage/modelname={modelName}/value={value}")]
-    public void UpdateImagePath(string modelName, string value)
+    public string UpdateImagePath(string modelName, string value)
     {
         Model model = new();
-        model.UpdateImagePath(modelName, value);
+        return model.UpdateImagePath(modelName, @String.Join('/',value.Split("%2F")));
 
     }
     [HttpPut("updateprice/modelname={modelName}/value={value}")]
