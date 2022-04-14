@@ -1,31 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\younis\\Desktop\\pro\\Shopy.Web\\Shopy.Web.csproj": {}
+    "/home/mab/Desktop/SoftwareProject/shopy/Shopy.Web/Shopy.Web.csproj": {}
   },
   "projects": {
-    "C:\\Users\\younis\\Desktop\\pro\\Shopy.Web\\Shopy.Web.csproj": {
+    "/home/mab/Desktop/SoftwareProject/shopy/Shopy.Web/Shopy.Web.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\younis\\Desktop\\pro\\Shopy.Web\\Shopy.Web.csproj",
+        "projectUniqueName": "/home/mab/Desktop/SoftwareProject/shopy/Shopy.Web/Shopy.Web.csproj",
         "projectName": "Shopy.Web",
-        "projectPath": "C:\\Users\\younis\\Desktop\\pro\\Shopy.Web\\Shopy.Web.csproj",
-        "packagesPath": "C:\\Users\\younis\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\younis\\Desktop\\pro\\Shopy.Web\\obj\\",
+        "projectPath": "/home/mab/Desktop/SoftwareProject/shopy/Shopy.Web/Shopy.Web.csproj",
+        "packagesPath": "/home/mab/.nuget/packages/",
+        "outputPath": "/home/mab/Desktop/SoftwareProject/shopy/Shopy.Web/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\younis\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/home/mab/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -98,7 +92,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/6.0.201/RuntimeIdentifierGraph.json"
         }
       }
     }

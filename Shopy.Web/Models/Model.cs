@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using Shopy.Web.Dtos;
 using Shopy.Web.Interfaces;
+using Shopy.Web.Shared;
 
 #nullable disable
 
@@ -124,6 +126,17 @@ namespace Shopy.Web.Models
                 Model model = db.Models.Include(m => m.Products).FirstOrDefault(m => m.Name == modelName);
                 count = model.Products.Where(p => p.ClientUsername == null).Count();
                 return count;
+            }
+        }
+        public List<ProductDto> GetProducts(string modelName)
+        {
+
+            using (ShopyCtx db = new())
+            {
+                Model model = db.Models
+                .Include(m => m.Products)
+                .FirstOrDefault(m => m.Name == modelName);
+                return model.Products.Where(p => p.ClientUsername == null).ToList().AsDto();
             }
         }
         public List<Model> GetAllOrderedbySale(int limit)

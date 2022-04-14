@@ -166,6 +166,25 @@ public class CartController : ControllerBase
             return BadRequest("Error checking out: " + ex.Message);
         }
     }
+    [HttpDelete("RemoveFromCart/{pid:int}")]
+    public ActionResult RemoveFromCart(int pid)
+    {
+        Product product = new();
+        if (!product.Exist(pid))
+        {
+            return BadRequest("Product you want to remove from cart does not exist");
+        }
+        try
+        {
+            Cart Cart = new();
+            Cart.RemoveFromCart(pid);
+            return Ok("Done removing from cart");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest("Error removing from cart: " + ex.Message);
+        }
+    }
 
 
 }

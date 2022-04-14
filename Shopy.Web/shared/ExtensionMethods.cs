@@ -23,6 +23,7 @@ public static class ExtensionMethods
     {
         return new CartDto
         {
+            Id = cart.Id,
             City = cart.City,
             Country = cart.Country,
             Email = cart.Email,
@@ -43,6 +44,7 @@ public static class ExtensionMethods
         {
             return new Product
             {
+                Id = product.Id,
                 Model = product.Model,
                 ClientUsername = product.ClientUsername
             };
@@ -128,9 +130,9 @@ public static class ExtensionMethods
     }
     public static Vendor AsNormal(this VendorDto vendor)
     {
-        return new Vendor 
+        return new Vendor
         {
-        
+
             Name = vendor.Name,
             City = vendor.City,
             Country = vendor.Country,
@@ -145,16 +147,16 @@ public static class ExtensionMethods
     {
         return new ModelDto
         {
-           Brand = model.Brand,
-           Category=model.Category,
-           Color = model.Color,
-           Features = model.Features,
-           ImagePath = model.ImagePath,
-           Name = model.Name,
-           Price = model.Price,
-           Rate=model.Rate,
-           SalePrice=model.SalePrice,
-           VendorUsername=model.VendorUsername,
+            Brand = model.Brand,
+            Category = model.Category,
+            Color = model.Color,
+            Features = model.Features,
+            ImagePath = model.ImagePath,
+            Name = model.Name,
+            Price = model.Price,
+            Rate = model.Rate,
+            SalePrice = model.SalePrice,
+            VendorUsername = model.VendorUsername,
         };
 
     }

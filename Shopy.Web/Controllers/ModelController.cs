@@ -6,32 +6,32 @@ using Shopy.Web.Shared;
 
 namespace Northwind.WebApi.Controllers;
 
-    [Route("api/models/")]
-    [ApiController]
-    public class ModelController : ControllerBase
+[Route("api/models/")]
+[ApiController]
+public class ModelController : ControllerBase
+{
+    // GET: api/<ModelController>
+    [HttpGet]
+    public ModelDto Get(string name)
     {
-        // GET: api/<ModelController>
-        [HttpGet]
-        public ModelDto Get(string name)
-        {
         Model model = new();
         ModelDto _model = model.Get(name).AsDto();
         return _model;
-        }
+    }
 
-        // PUT api/<ModelController>/5
-        [HttpPut("updatename/modelname={modelName}/value={value}")]
-        public void UpdateName(string modelName,string value)
-        {
+    // PUT api/<ModelController>/5
+    [HttpPut("updatename/modelname={modelName}/value={value}")]
+    public void UpdateName(string modelName, string value)
+    {
         Model model = new();
         model.UpdateName(modelName, value);
 
-        }
+    }
     [HttpPut("updateimage/modelname={modelName}/value={value}")]
     public string UpdateImagePath(string modelName, string value)
     {
         Model model = new();
-        return model.UpdateImagePath(modelName, @String.Join('/',value.Split("%2F")));
+        return model.UpdateImagePath(modelName, @String.Join('/', value.Split("%2F")));
 
     }
     [HttpPut("updateprice/modelname={modelName}/value={value}")]
@@ -71,33 +71,33 @@ namespace Northwind.WebApi.Controllers;
     }
     // POST api/<ModelController>
     [HttpGet("count/")]
-        public int count(string modelName)
-        {
+    public int count(string modelName)
+    {
         Model model = new();
         return model.CntProducts(modelName);
-        }
+    }
 
 
-        // PUT api/<ModelController>/5
-        [HttpPost("addWithproducts/quntity={number}")]
-        public void AddModelWithProducts(ModelDto model, int number)
-        {
+    // PUT api/<ModelController>/5
+    [HttpPost("addWithproducts/quntity={number}")]
+    public void AddModelWithProducts(ModelDto model, int number)
+    {
         Model _model = new Model();
         _model.AddModelWithProducts(model.AsNormal(), number);
 
-        }
-        [HttpGet("EvaluateRate/")]
-        public string EvaluateRate(string modelName)
+    }
+    [HttpGet("EvaluateRate/")]
+    public string EvaluateRate(string modelName)
     {
         Model model = new();
         return model.EvaluateRate(modelName);
-        
+
     }
     [HttpPut("UpdateIsSale/{modelName}/{value}")]
-    public void UpdateIsSale(string modelName,bool value)
+    public void UpdateIsSale(string modelName, bool value)
     {
         Model model = new();
-        model.UpdateIsSale(modelName,value);
+        model.UpdateIsSale(modelName, value);
 
     }
 
@@ -124,10 +124,18 @@ namespace Northwind.WebApi.Controllers;
     }
     // DELETE api/<ModelController>/5
     [HttpDelete("Delete/{modelName}")]
-        public void Delete(string modelName)
-        {
+    public void Delete(string modelName)
+    {
         Model model = new();
         model.DeleteModel(modelName);
-        }
     }
+    [HttpGet("GetProducts/{modelName}")]
+    public ActionResult GetProducts(string modelName)
+    {
+        Model model = new();
+
+        return Ok(model.GetProducts(modelName));
+    }
+}
+
 

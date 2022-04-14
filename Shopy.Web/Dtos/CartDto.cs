@@ -6,6 +6,7 @@ namespace Shopy.Web.Dtos;
 #nullable disable
 public class CartDto
 {
+    public int Id { get; set; }
 
     public string Country { get; set; }
 
