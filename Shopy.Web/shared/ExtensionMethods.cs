@@ -35,6 +35,7 @@ public static class ExtensionMethods
     {
         return new ProductDto
         {
+            Id = product.Id,
             Model = product.Model,
             ClientUsername = product.ClientUsername
         };
