@@ -80,6 +80,10 @@ public class ClientController : ControllerBase
     public ActionResult SignUp(ClientDto clientDto)
     {
         Client client = clientDto.AsNormal();
+        if (client.Exist(client.Username))
+        {
+            return BadRequest(MyExceptions.ClientAlreadyExist(client.Username));
+        }
         string VerificationCode = new Random().Next(100000, 999999).ToString();
         try
         {

@@ -4,10 +4,22 @@ public class Startup
 {
     public void ConfigureServices(IServiceCollection services)
     {
+        var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         services.AddSingleton<ShopyCtx>();
         services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
         services.AddSwaggerGen();
+        services.AddCors(options =>
+{
+    options.AddPolicy(MyAllowSpecificOrigins,
+                          policy =>
+                          {
+                              policy.WithOrigins("*")
+                                                  .AllowAnyHeader()
+                                                  .AllowAnyMethod();
+                          });
+});
 
     }
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -19,6 +31,7 @@ public class Startup
             app.UseSwaggerUI(options =>
             {
 
+
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
                 options.RoutePrefix = string.Empty;
             });
@@ -27,6 +40,7 @@ public class Startup
             app.UseHsts();
 
         app.UseRouting();
+        app.UseCors("_myAllowSpecificOrigins");
         app.UseDefaultFiles();
         app.UseStaticFiles();
         app.UseHttpsRedirection();
