@@ -143,6 +143,12 @@ public class ModelController : ControllerBase
 
         return Ok(model.GetProductsInCart(modelName).AsDto());
     }
+    [HttpPut("UpdateIsSales/{modelName}/{value}")]
+    public void UpdateIsSales(string modelName, bool value)
+    {
+        Model model = new();
+        model.UpdateIsSale(modelName, value);
+    }
 }
 
 
