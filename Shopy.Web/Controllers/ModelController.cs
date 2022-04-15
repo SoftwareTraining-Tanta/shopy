@@ -136,6 +136,13 @@ public class ModelController : ControllerBase
 
         return Ok(model.GetProducts(modelName));
     }
+    [HttpGet("GetProductsInCart/{modelName}")]
+    public ActionResult GetProductsInCart(string modelName)
+    {
+        Model model = new();
+
+        return Ok(model.GetProductsInCart(modelName));
+    }
 }
 
 
