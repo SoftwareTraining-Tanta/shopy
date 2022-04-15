@@ -80,7 +80,7 @@ namespace Shopy.Web.Models
             }
         }
 
-        public string  Delete(string username)
+        public string Delete(string username)
         {
             var isFound = Exist(username);
             if (!isFound)
@@ -142,7 +142,7 @@ namespace Shopy.Web.Models
         {
             using (ShopyCtx db = new())
             {
-                var models= db.Models
+                var models = db.Models
                 .Include(m => m.VendorNavigation)
                 .Where(m => m.VendorNavigation.Username == Username)
                 .ToList();
