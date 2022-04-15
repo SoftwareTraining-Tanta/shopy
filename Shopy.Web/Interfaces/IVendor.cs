@@ -7,7 +7,7 @@ public interface IVendor
     bool Exist(string username);
     string Delete(string username);
     string UpdatePassword(string username, string newPassword);
-    string UpdateVerificationCode(Vendor vendor, string verificationCode);
+    string UpdateVerificationCode(string vendorUsername, string verificationCode);
     List<Vendor> AllVendors(int limit);
     List<Model> VendorModels(string Username);
 }

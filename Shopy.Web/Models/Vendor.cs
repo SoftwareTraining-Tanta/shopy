@@ -126,11 +126,12 @@ namespace Shopy.Web.Models
             return "password is  updated successfully";
         }
 
-        public string UpdateVerificationCode(Vendor vendor, string verificationCode)
+        public string UpdateVerificationCode(string vendorUsername, string verificationCode)
         {
 
             using (ShopyCtx db = new())
             {
+                Vendor vendor = db.Vendors.FirstOrDefault(v => v.Username == vendorUsername);
                 vendor.VerificationCode = verificationCode;
                 db.SaveChanges();
             }

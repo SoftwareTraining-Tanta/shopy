@@ -37,11 +37,7 @@ public class VendorController : ControllerBase
     public string UpdateVerificationCode(string username, string value)
     {
         Vendor vendor = new();
-        vendor = vendor.Get(username);
-
-
-        return vendor.UpdateVerificationCode(vendor, value);
-
+        return vendor.UpdateVerificationCode(username, value);
     }
     // POST api/<VendorController>
     [HttpPost]
@@ -100,7 +96,7 @@ public class VendorController : ControllerBase
         }
         Vendor _vendor = new();
 
-        _vendor.UpdateVerificationCode(vendor, VerificationCode);
+        _vendor.UpdateVerificationCode(vendor.Username, VerificationCode);
         _vendor.Add(vendor);
         return Ok(VerificationCode);
 
