@@ -106,25 +106,6 @@ public class CartController : ControllerBase
             return BadRequest("Error getting total price: " + ex.Message);
         }
     }
-    [HttpDelete("delete/{id:int}")]
-    public ActionResult Delete(int id)
-    {
-        Product product = new();
-        if (!product.Exist(id))
-        {
-            return BadRequest("Product you want to remove from cart does not exist");
-        }
-        try
-        {
-            Cart Cart = new();
-            Cart.RemoveFromCart(id);
-            return Ok("Done deleting from cart");
-        }
-        catch (Exception ex)
-        {
-            return BadRequest("Error removing from cart: " + ex.Message);
-        }
-    }
     [HttpGet("InCart/{clientUsername}")]
     public ActionResult InCart(string clientUsername)
     {
@@ -163,18 +144,15 @@ public class CartController : ControllerBase
             return BadRequest("Error checking out: " + ex.Message);
         }
     }
-    [HttpDelete("RemoveFromCart/{pid:int}")]
-    public ActionResult RemoveFromCart(int pid)
+    [HttpDelete("RemoveFromCart/{clientUsername}/{modelName}")]
+    public ActionResult RemoveFromCart(string clientUsername, string modelName)
     {
         Product product = new();
-        if (!product.Exist(pid))
-        {
-            return BadRequest("Product you want to remove from cart does not exist");
-        }
+
         try
         {
             Cart Cart = new();
-            Cart.RemoveFromCart(pid);
+            Cart.RemoveFromCart(clientUsername, modelName);
             return Ok("Done removing from cart");
         }
         catch (Exception ex)

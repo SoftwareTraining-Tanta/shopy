@@ -9,7 +9,7 @@ public interface ICart
     int Count(string clientUsername);
     void AddToCart(string ClientUsername, string modelName);
     decimal TotalPrice(string clientUsername);
-    string RemoveFromCart(int ProductId);
+    string RemoveFromCart(string clientUsername, string modelName);
     string CheckOut(string clientUsername);
     List<Product> InCart(string clientUsername);
 }

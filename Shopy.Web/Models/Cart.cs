@@ -118,14 +118,15 @@ public partial class Cart : ICart
         }
     }
 
-    public string RemoveFromCart(int ProductId)
+    public string RemoveFromCart(string clientUsername, string modelName)
     {
         using (ShopyCtx db = new())
         {
+            List<Product> products = db.Products.Where(p => p.Model == modelName && p.ClientUsername == clientUsername).ToList();
             Product Product = new();
 
-            Product.UpdateClientUsername(ProductId, null);
-            Product.UpdateCartId(ProductId, null);
+            Product.UpdateClientUsername(products.First().Id, null);
+            Product.UpdateCartId(products.First().Id, null);
             return "Item is remove from cart";
         }
     }
