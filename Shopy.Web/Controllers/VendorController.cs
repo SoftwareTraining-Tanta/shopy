@@ -4,7 +4,7 @@ using Shopy.Web.Models;
 using Shopy.Web.Dtos;
 using Shopy.Web.Shared;
 namespace Northwind.WebApi.Controllers;
-
+#nullable disable
 [Route("api/Vendors/")]
 [ApiController]
 public class VendorController : ControllerBase
@@ -115,6 +115,7 @@ public class VendorController : ControllerBase
             }
             using (ShopyCtx db = new())
             {
+                _vendor = db.Vendors.FirstOrDefault(v => v.Username == username);
                 _vendor.IsVerified = true;
                 db.SaveChanges();
             }
