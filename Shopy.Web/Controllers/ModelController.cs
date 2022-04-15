@@ -141,7 +141,7 @@ public class ModelController : ControllerBase
     {
         Model model = new();
 
-        return Ok(model.GetProductsInCart(modelName));
+        return Ok(model.GetProductsInCart(modelName).AsDto());
     }
 }
 
