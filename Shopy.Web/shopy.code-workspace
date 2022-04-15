@@ -1,10 +1,7 @@
 {
 	"folders": [
 		{
-			"path": ".."
-		},
-		{
-			"path": "Models"
+			"path": "."
 		},
 		{
 			"path": "Controllers"
@@ -13,11 +10,16 @@
 			"path": "Dtos"
 		},
 		{
-			"path": "shared"
+			"path": "Interfaces"
 		},
 		{
-			"path": "Interfaces"
+			"path": "Models"
+		},
+		{
+			"path": "shared"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "Shopy.Web"
+	}
 }

@@ -130,6 +130,12 @@ namespace Shopy.Web.Migrations
                         .HasColumnType("varchar(100)")
                         .HasColumnName("brand");
 
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("category");
+
                     b.Property<string>("Color")
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
@@ -146,6 +152,9 @@ namespace Shopy.Web.Migrations
                         .HasColumnType("varchar(512)")
                         .HasColumnName("imagePath");
 
+                    b.Property<bool>("IsSale")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(9,2)")
                         .HasColumnName("price");
@@ -158,8 +167,15 @@ namespace Shopy.Web.Migrations
                         .HasColumnType("decimal(10,0)")
                         .HasColumnName("salePrice");
 
+                    b.Property<string>("VendorUsername")
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("vendorUsername");
+
                     b.HasKey("Name")
                         .HasName("PRIMARY");
+
+                    b.HasIndex("VendorUsername");
 
                     b.ToTable("models");
                 });
@@ -175,12 +191,6 @@ namespace Shopy.Web.Migrations
                         .HasColumnType("int")
                         .HasColumnName("cartId");
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)")
-                        .HasColumnName("category");
-
                     b.Property<string>("ClientUsername")
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)")
@@ -193,16 +203,8 @@ namespace Shopy.Web.Migrations
                         .HasColumnName("model");
 
                     b.Property<decimal?>("Rate")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("decimal(2,1)")
-                        .HasColumnName("rate")
-                        .HasDefaultValueSql("'0.0'");
-
-                    b.Property<string>("VendorUsername")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("varchar(30)")
-                        .HasColumnName("vendorUsername");
+                        .HasColumnName("rate");
 
                     b.HasKey("Id");
 
@@ -211,8 +213,6 @@ namespace Shopy.Web.Migrations
                     b.HasIndex(new[] { "CartId" }, "cartId");
 
                     b.HasIndex(new[] { "ClientUsername" }, "clientId");
-
-                    b.HasIndex(new[] { "VendorUsername" }, "vendorId");
 
                     b.ToTable("products");
                 });
@@ -240,6 +240,10 @@ namespace Shopy.Web.Migrations
                         .HasColumnType("varchar(60)")
                         .HasColumnName("email");
 
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("isVerified");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(30)
@@ -258,6 +262,12 @@ namespace Shopy.Web.Migrations
                         .HasColumnType("varchar(20)")
                         .HasColumnName("phone");
 
+                    b.Property<string>("VerificationCode")
+                        .IsRequired()
+                        .HasMaxLength(6)
+                        .HasColumnType("varchar(6)")
+                        .HasColumnName("verificationCode");
+
                     b.HasKey("Username")
                         .HasName("PRIMARY");
 
@@ -274,6 +284,16 @@ namespace Shopy.Web.Migrations
                         .HasConstraintName("carts_ibfk_1");
 
                     b.Navigation("ClientNavigation");
+                });
+
+            modelBuilder.Entity("Shopy.Web.Models.Model", b =>
+                {
+                    b.HasOne("Shopy.Web.Models.Vendor", "VendorNavigation")
+                        .WithMany("Models")
+                        .HasForeignKey("VendorUsername")
+                        .HasConstraintName("models_ibfk_1");
+
+                    b.Navigation("VendorNavigation");
                 });
 
             modelBuilder.Entity("Shopy.Web.Models.Product", b =>
@@ -294,19 +314,11 @@ namespace Shopy.Web.Migrations
                         .IsRequired()
                         .HasConstraintName("products_ibfk_4");
 
-                    b.HasOne("Shopy.Web.Models.Vendor", "VendorNavigation")
-                        .WithMany("Products")
-                        .HasForeignKey("VendorUsername")
-                        .IsRequired()
-                        .HasConstraintName("products_ibfk_1");
-
                     b.Navigation("Cart");
 
                     b.Navigation("ClientNavigation");
 
                     b.Navigation("ModelNavigation");
-
-                    b.Navigation("VendorNavigation");
                 });
 
             modelBuilder.Entity("Shopy.Web.Models.Cart", b =>
@@ -328,7 +340,7 @@ namespace Shopy.Web.Migrations
 
             modelBuilder.Entity("Shopy.Web.Models.Vendor", b =>
                 {
-                    b.Navigation("Products");
+                    b.Navigation("Models");
                 });
 #pragma warning restore 612, 618
         }

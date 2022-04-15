@@ -32,7 +32,7 @@ public class ClientController : ControllerBase
         return Client.AllClients(limit).AsDto();
     }
     [HttpPut("username={username}/value={value}/Properity={properity}")]
-    public string update(string username, string value)
+    public string Update(string username, string value)
     {
         Client Client = new();
 
@@ -45,7 +45,7 @@ public class ClientController : ControllerBase
 
         return Client.Add(client.AsNormal());
     }
-    [HttpDelete]
+    [HttpDelete("Delete")]
     public dynamic Delete(string username)
     {
         Client Client = new();
@@ -65,7 +65,7 @@ public class ClientController : ControllerBase
             }
 
             ClientDto client = Client.Get(username).AsDto();
-            if (client.Password.ToSha256() == password)
+            if (password.ToSha256() == client.Password)
             {
                 return Ok(client.Username);
             }
@@ -80,6 +80,10 @@ public class ClientController : ControllerBase
     public ActionResult SignUp(ClientDto clientDto)
     {
         Client client = clientDto.AsNormal();
+        if (client.Exist(client.Username))
+        {
+            return BadRequest(MyExceptions.ClientAlreadyExist(client.Username));
+        }
         string VerificationCode = new Random().Next(100000, 999999).ToString();
         try
         {

@@ -74,16 +74,14 @@ public partial class Client : IClient
             client.Password = client.Password.ToSha256();
 
             db.Clients.Add(client);
-            client.Carts.Add(
-                new Cart()
-                {
-                    ClientUsername = client.Username,
-                    Country = client.Country,
-                    City = client.City,
-                    Phone = client.Phone,
-                    Email = client.Email
-                }
-            );
+            db.Carts.Add(new Cart()
+            {
+                ClientUsername = client.Username,
+                Country = client.Country,
+                City = client.City,
+                Phone = client.Phone,
+                Email = client.Email
+            });
             db.SaveChanges();
             return "Done adding client";
         }

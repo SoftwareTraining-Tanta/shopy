@@ -53,12 +53,14 @@ new MySqlServerVersion(new Version(10, 4, 17)));
             {
                 entity.HasKey(e => e.Name)
                     .HasName("PRIMARY");
+                entity.HasOne(d => d.VendorNavigation)
+                    .WithMany(p => p.Models)
+                    .HasForeignKey(d => d.VendorUsername)
+                    .HasConstraintName("models_ibfk_1");
             });
 
             modelBuilder.Entity<Product>(entity =>
             {
-                entity.Property(e => e.Rate).HasDefaultValueSql("'0.0'");
-
                 entity.HasOne(d => d.Cart)
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.CartId)
@@ -75,11 +77,6 @@ new MySqlServerVersion(new Version(10, 4, 17)));
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("products_ibfk_4");
 
-                entity.HasOne(d => d.VendorNavigation)
-                    .WithMany(p => p.Products)
-                    .HasForeignKey(d => d.VendorUsername)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("products_ibfk_1");
             });
 
             modelBuilder.Entity<Vendor>(entity =>

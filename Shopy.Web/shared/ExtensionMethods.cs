@@ -23,6 +23,7 @@ public static class ExtensionMethods
     {
         return new CartDto
         {
+            Id = cart.Id,
             City = cart.City,
             Country = cart.Country,
             Email = cart.Email,
@@ -34,11 +35,23 @@ public static class ExtensionMethods
     {
         return new ProductDto
         {
-            Category = product.Category,
+            Id = product.Id,
             Model = product.Model,
+            ClientUsername = product.ClientUsername
         };
     }
-    public static ICollection<ProductDto> AsDto(this ICollection<Product> products)
+    public static Product AsNormal(this ProductDto product)
+    {
+        {
+            return new Product
+            {
+                Id = product.Id,
+                Model = product.Model,
+                ClientUsername = product.ClientUsername
+            };
+        }
+    }
+    public static List<ProductDto> AsDto(this ICollection<Product> products)
     {
         List<ProductDto> productDtos = new();
         foreach (Product p in products)
@@ -47,7 +60,8 @@ public static class ExtensionMethods
         }
         return productDtos;
     }
-    public static ICollection<CartDto> AsDto(this ICollection<Cart> carts)
+
+    public static List<CartDto> AsDto(this ICollection<Cart> carts)
     {
         List<CartDto> cartDtos = new();
         foreach (Cart c in carts)
@@ -91,4 +105,89 @@ public static class ExtensionMethods
             return stringBuilder.ToString();
         }
     }
+    public static VendorDto AsDto(this Vendor vendor)
+    {
+        return new VendorDto
+        {
+            Name = vendor.Name,
+            City = vendor.City,
+            Country = vendor.Country,
+            Email = vendor.Email,
+            Password = vendor.Password,
+            Phone = vendor.Phone,
+            Username = vendor.Username,
+
+        };
+
+    }
+    public static List<VendorDto> AsDto(this ICollection<Vendor> vendors)
+    {
+        List<VendorDto> vendorDtos = new();
+        foreach (Vendor _vendor in vendors)
+        {
+            vendorDtos.Add(_vendor.AsDto());
+        }
+        return vendorDtos;
+    }
+    public static Vendor AsNormal(this VendorDto vendor)
+    {
+        return new Vendor
+        {
+
+            Name = vendor.Name,
+            City = vendor.City,
+            Country = vendor.Country,
+            Email = vendor.Email,
+            Password = vendor.Password,
+            Phone = vendor.Phone,
+            Username = vendor.Username,
+
+        };
+    }
+    public static ModelDto AsDto(this Model model)
+    {
+        return new ModelDto
+        {
+            Brand = model.Brand,
+            Category = model.Category,
+            Color = model.Color,
+            Features = model.Features,
+            ImagePath = model.ImagePath,
+            Name = model.Name,
+            Price = model.Price,
+            Rate = model.Rate,
+            SalePrice = model.SalePrice,
+            VendorUsername = model.VendorUsername,
+            IsSale = model.IsSale
+        };
+
+    }
+    public static Model AsNormal(this ModelDto model)
+    {
+        return new Model
+        {
+            Brand = model.Brand,
+            Category = model.Category,
+            Color = model.Color,
+            Features = model.Features,
+            ImagePath = model.ImagePath,
+            Name = model.Name,
+            Price = model.Price,
+            Rate = model.Rate,
+            SalePrice = model.SalePrice,
+            VendorUsername = model.VendorUsername,
+            IsSale = model.IsSale
+        };
+
+    }
+    public static List<ModelDto> AsDto(this ICollection<Model> models)
+    {
+        List<ModelDto> modelDtos = new();
+        foreach (Model _model in models)
+        {
+            modelDtos.Add(_model.AsDto());
+        }
+        return modelDtos;
+    }
+
 }

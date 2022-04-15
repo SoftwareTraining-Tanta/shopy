@@ -8,5 +8,8 @@ public class ModelDto
     public decimal? Rate { get; set; }
     public string Brand { get; set; }
     public string Color { get; set; }
+    public string Category { get; set; }
+    public string VendorUsername { get; set; }
     public string Features { get; set; }
+    public bool IsSale { get; set; }
 }
