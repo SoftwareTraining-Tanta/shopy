@@ -158,6 +158,7 @@ public static class ExtensionMethods
             Rate = model.Rate,
             SalePrice = model.SalePrice,
             VendorUsername = model.VendorUsername,
+            IsSale = model.IsSale
         };
 
     }
@@ -175,6 +176,7 @@ public static class ExtensionMethods
             Rate = model.Rate,
             SalePrice = model.SalePrice,
             VendorUsername = model.VendorUsername,
+            IsSale = model.IsSale
         };
 
     }

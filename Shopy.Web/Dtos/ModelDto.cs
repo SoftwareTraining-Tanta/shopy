@@ -11,4 +11,5 @@ public class ModelDto
     public string Category { get; set; }
     public string VendorUsername { get; set; }
     public string Features { get; set; }
+    public bool IsSale { get; set; }
 }
