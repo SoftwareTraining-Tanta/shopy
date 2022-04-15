@@ -10,21 +10,18 @@ using Shopy.Web.Interfaces;
 [Route("api/carts/")]
 public class CartController : ControllerBase
 {
-    [HttpPost("add/{customerUsername}/{pid:int}")]
-    public ActionResult Add(string customerUsername, int pid)
+    [HttpPost("add/{customerUsername}/{modelName}")]
+    public ActionResult Add(string customerUsername, string modelName)
     {
         Client client = new();
         Product product = new();
         if (!client.Exist(customerUsername))
             return BadRequest(MyExceptions.ClientNotFound(customerUsername));
 
-        if (!product.Exist(pid))
-            return BadRequest(MyExceptions.ProductNotFound(pid));
-
         try
         {
             Cart Cart = new();
-            Cart.AddToCart(customerUsername, pid);
+            Cart.AddToCart(customerUsername, modelName);
             return Ok("Done adding to cart");
         }
         catch (Exception ex)

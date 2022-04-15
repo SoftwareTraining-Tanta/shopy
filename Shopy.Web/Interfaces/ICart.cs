@@ -7,7 +7,7 @@ public interface ICart
     bool Exist(string clientUsername);
     Cart Get(string clientUsername);
     int Count(string clientUsername);
-    void AddToCart(string ClientUsername, int ProductId);
+    void AddToCart(string ClientUsername, string modelName);
     decimal TotalPrice(string clientUsername);
     string RemoveFromCart(int ProductId);
     string CheckOut(string clientUsername);

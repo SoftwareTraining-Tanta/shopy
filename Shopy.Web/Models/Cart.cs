@@ -93,14 +93,17 @@ public partial class Cart : ICart
         }
     }
 
-    public void AddToCart(string ClientUsername, int ProductId) // added by Harby at 12:00 AM
+    public void AddToCart(string ClientUsername, string modelName) // added by Harby at 12:00 AM
     {
         using (ShopyCtx db = new())
         {
             Product Product = new();
+            // Model model = db.Models.FirstOrDefault(m => m.Name == modelName);
+            List<Product> products = db.Products.Where(p => p.Model == modelName && p.ClientUsername == null).ToList();
+
             int cartId = db.Carts.FirstOrDefault(c => c.ClientUsername == ClientUsername).Id;
-            Product.UpdateClientUsername(ProductId, ClientUsername);
-            Product.UpdateCartId(ProductId, cartId);
+            Product.UpdateClientUsername(products.First().Id, ClientUsername);
+            Product.UpdateCartId(products.First().Id, cartId);
         }
     }
 
