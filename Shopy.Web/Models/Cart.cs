@@ -141,6 +141,7 @@ public partial class Cart : ICart
             Product.UpdateCartId(p.Id, null);
         }
         return "successful Transactions";
+
     }
 
     public List<Product> InCart(string clientUsername)
@@ -149,7 +150,7 @@ public partial class Cart : ICart
         using (ShopyCtx db = new())
         {
             Cart cart = db.Carts.Include(c => c.Products).FirstOrDefault(c => c.ClientUsername == clientUsername);
-            return cart.Products.Where(p => p.CartId == cart.Id && p.ClientUsername == clientUsername).ToList();
+            return cart.Products.ToList();
         }
     }
 
