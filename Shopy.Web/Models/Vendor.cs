@@ -65,7 +65,7 @@ namespace Shopy.Web.Models
                     return "Vendor already exists";
                 }
                 vendor.Password = vendor.Password.ToSha256();
-
+                vendor.VerificationCode = "null1";
                 db.Vendors.Add(vendor);
                 db.SaveChanges();
             }
