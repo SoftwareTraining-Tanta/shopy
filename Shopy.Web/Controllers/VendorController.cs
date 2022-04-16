@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 
 using Shopy.Web.Models;
 using Shopy.Web.Dtos;
@@ -96,8 +96,8 @@ public class VendorController : ControllerBase
         }
         Vendor _vendor = new();
 
-        _vendor.UpdateVerificationCode(vendor.Username, VerificationCode);
         _vendor.Add(vendor);
+        _vendor.UpdateVerificationCode(vendor.Username, VerificationCode);
         return Ok(VerificationCode);
 
     }
