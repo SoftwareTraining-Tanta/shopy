@@ -127,7 +127,20 @@ public class ClientController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
-    //ask michael to delete the client if not verified
+    [HttpGet("ClientHistory/{username}")]
+    public ActionResult ClientHistory(string username)
+    {
+        try
+        {
+            Client Client = new();
+
+            return Ok(Client.ClientHistory(username).AsDto());
+        }
+        catch
+        {
+            return BadRequest("Error Getting history");
+        }
+    }
 }
 
 //api/clients/Get(username={username})
