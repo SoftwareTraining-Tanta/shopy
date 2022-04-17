@@ -1,190 +1,143 @@
 
+using Microsoft.AspNetCore.Mvc;
+namespace Northwind.WebApi.Controllers;
 
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Security.Cryptography;
-
+using Shopy.Web.Models;
+using Shopy.Web.Dtos;
 using Shopy.Web.Shared;
-#nullable disable
-using Shopy.Web.Interfaces;
-namespace Shopy.Web.Models;
 
-[Table("clients")]
-public partial class Client : IClient
+[ApiController]
+[Route("api/clients/")]
+public class ClientController : ControllerBase
 {
-    public Client()
+
+    // private readonly ILogger<WeatherForecastController> _logger;
+    // public WeatherForecastController(
+    //   ILogger<WeatherForecastController> logger)
+    // {
+    //     _logger = logger;
+    // }
+    [HttpGet("get/username={username}")] // api/client/username={username}
+    public ClientDto Get(string username)
     {
-        Carts = new HashSet<Cart>();
-        Products = new HashSet<Product>();
+        Client Client = new();
+        ClientDto client = Client.Get(username).AsDto();
+        return client;
     }
-
-    [Key]
-    [Column("username")]
-    [StringLength(30)]
-    public string Username { get; set; }
-    [Required]
-    [Column("name")]
-    [StringLength(30)]
-    public string Name { get; set; }
-    [Column("country")]
-    [StringLength(30)]
-    public string Country { get; set; }
-    [Column("city")]
-    [StringLength(30)]
-    public string City { get; set; }
-    [Required]
-    [Column("phone")]
-    [StringLength(20)]
-    public string Phone { get; set; }
-    [Required]
-    [Column("email")]
-    [StringLength(60)]
-    public string Email { get; set; }
-    [Required]
-    [Column("verificationCode")]
-    [StringLength(6)]
-    public string VerificationCode { get; set; }
-    [Required]
-    [Column("isVerified")]
-    public bool IsVerified { get; set; }
-    [Required]
-    [Column("password")]
-    [StringLength(100)]
-    public string Password { get; set; }
-
-
-    [InverseProperty(nameof(Cart.ClientNavigation))]
-    public virtual ICollection<Cart> Carts { get; set; }
-    [InverseProperty(nameof(Product.ClientNavigation))]
-    public virtual ICollection<Product> Products { get; set; }
-    public enum Properties { Name, Email, Phone, City, Country, Password };
-    public string Add(Client client)
+    [HttpGet("getlimit/limit={limit:int}")]
+    public dynamic GetLimit(int limit)
     {
-        using (ShopyCtx db = new())
-        {
-            // ILoggerFactory loggerFactory = db.GetService<ILoggerFactory>();
-            // loggerFactory.AddProvider(new ConsoleLoggerProvider());
+        Client Client = new();
 
-            var getClient = db.Clients.FirstOrDefault(cl => cl.Equals(client));
-            if (getClient != null)
+        return Client.AllClients(limit).AsDto();
+    }
+    [HttpPut("username={username}/value={value}/Properity={properity}")]
+    public string Update(string username, string value)
+    {
+        Client Client = new();
+
+        return Client.Update(username, value);
+    }
+    [HttpPost]
+    public string Add(ClientDto client)
+    {
+        Client Client = new();
+
+        return Client.Add(client.AsNormal());
+    }
+    [HttpDelete("Delete")]
+    public dynamic Delete(string username)
+    {
+        Client Client = new();
+
+        return Client.Delete(username);
+    }
+    [HttpPost("signin/{username}/{password}")]
+    public ActionResult SignIn(string username, string password)
+    {
+        try
+        {
+            Client Client = new();
+
+            if (!Client.Exist(username))
             {
-                return "Client already exists";
+                return NotFound(MyExceptions.ClientNotFound(username));
             }
 
-            client.Password = client.Password.ToSha256();
-
-            db.Clients.Add(client);
-            db.Carts.Add(new Cart()
+            ClientDto client = Client.Get(username).AsDto();
+            if (password.ToSha256() == client.Password)
             {
-                ClientUsername = client.Username,
-                Country = client.Country,
-                City = client.City,
-                Phone = client.Phone,
-                Email = client.Email
-            });
-            db.SaveChanges();
-            return "Done adding client";
-        }
-    }
-    public Client Get(string username)
-    {
-        using (ShopyCtx db = new())
-        {
-            return db.Clients.FirstOrDefault(client => client.Username == username);
-        }
-    }
-    public bool Exist(string username)
-    {
-        using (ShopyCtx db = new())
-        {
-            Client client = db.Clients.FirstOrDefault(cl => cl.Username == username);
-            return client != null;
-        }
-    }
-    public string Delete(string username)
-    {
-        var isFound = Exist(username);
-        if (!isFound)
-            return MyExceptions.ClientNotFound(username);
-        using ShopyCtx db = new();
-        var client = db.Clients.FirstOrDefault(client => client.Username == username);
-        // Cart cart = db.Carts.Where(c => c.ClientId == Username).FirstOrDefault();
-        // Cart.Delete(cart);
-        if (client != null) db.Clients.Remove(client);
-        db.SaveChanges();
-        return "Client Deleted";
-    }
-    public string Update(string username, dynamic value, Properties Properity = Properties.Name)
-    {
-        bool isFound = Exist(username);
-        if (!isFound) return MyExceptions.ClientNotFound(username);
-        using (ShopyCtx db = new())
-        {
-            var client = db.Clients.FirstOrDefault(c => c.Username == username);
-            switch (Properity)
-            {
-                case Properties.Name:
-                    if (client != null) client.Name = value;
-                    break;
-                case Properties.Country:
-                    if (client != null) client.Country = value;
-                    break;
-                case Properties.City:
-                    if (client != null) client.City = value;
-                    break;
-                case Properties.Email:
-                    if (client != null) client.Email = value;
-                    break;
-                case Properties.Phone:
-                    if (client != null) client.Phone = value;
-                    break;
-                case Properties.Password:
-                    if (client != null) client.Password = value;
-                    break;
-                default:
-                    if (client != null) client.Name = value;
-                    break;
+                return Ok(client.Username);
             }
-            db.SaveChanges();
-            return "Updated";
+            return BadRequest("Wrong password");
         }
-    }
-    public void UpdateVerificationCode(Client client, string verificationCode)
-    {
-        using (ShopyCtx db = new())
+        catch (Exception ex)
         {
-            client.VerificationCode = verificationCode;
-            db.SaveChanges();
+            return BadRequest(ex.Message);
         }
     }
-    public List<Client> AllClients(int limit)
+    [HttpPost("SignUp")]
+    public ActionResult SignUp(ClientDto clientDto)
     {
-        using (ShopyCtx db = new())
+        Client client = clientDto.AsNormal();
+        if (client.Exist(client.Username))
         {
-            var clients = db.Clients.Take(limit).DefaultIfEmpty().ToList();
-            if (clients != null) return clients;
-            return new List<Client>();
+            return BadRequest(MyExceptions.ClientAlreadyExist(client.Username));
         }
-    }
-    public List<Product> ClientProducts(string Username) // previously bought products
-    {
-        using (ShopyCtx db = new())
+        string VerificationCode = new Random().Next(100000, 999999).ToString();
+        try
         {
-            // ILoggerFactory loggerFactory = db.GetService<ILoggerFactory>();
-            // loggerFactory.AddProvider(new ConsoleLoggerProvider());
+            Smtp.SendMessage(
+            toEmail: clientDto.Email,
+            subject: "Verification code for Shopy",
+            body: "Please enter this code to verify your account : " + VerificationCode);
+        }
+        catch
+        {
+            return BadRequest("Error sending verification code");
+        }
+        Client Client = new();
 
-            // if the product is in the cart, It will not be in this list.
+        Client.UpdateVerificationCode(client, VerificationCode);
+        Client.Add(client);
+        return Ok(VerificationCode);
 
-            var products = db.Products.Where(p => p.ClientUsername == Username && p.CartId == null).ToList();
-            if (products != null) return products;
-            return new List<Product>();
-            // return client.Products.Where(p => p.CartId == null).ToList(); // use join
+    }
+    [HttpGet("Verify/{username}/{verificationCode}")]
+    public ActionResult Verify(string username, string verificationCode)
+    {
+        Client Client = new();
 
+        Client client = Client.Get(username);
+        try
+        {
+            if (client.VerificationCode != verificationCode)
+            {
+                return BadRequest("Verification Code is wrong");
+            }
+            using (ShopyCtx db = new())
+            {
+                client.IsVerified = true;
+                db.SaveChanges();
+            }
+            return Ok(client.Username);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
         }
     }
-
-    public void UpdatePassword(string username, string new_password)
+    [HttpGet("GetHistory/username={username}")]
+    public ActionResult GetHistory(string username)
     {
-        throw new NotImplementedException();
+        Client Client = new();
+        try
+        {
+            return Ok(Client.ClientHistory(username).AsDto());
+        }
+        catch
+        {
+            return BadRequest("Error getting history");
+        }
     }
 }
