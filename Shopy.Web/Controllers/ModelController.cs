@@ -136,13 +136,20 @@ public class ModelController : ControllerBase
 
         return Ok(model.GetProducts(modelName));
     }
-    [HttpGet("GetProductsInCart/{modelName}")]
-    public ActionResult GetProductsInCart(string modelName)
+    [HttpGet("GetProductsInCart/{modelName}/{clientUsername}")]
+    public ActionResult GetProductsInCart(string modelName, string clientUsername)
     {
         Model model = new();
-
-        return Ok(model.GetProductsInCart(modelName).AsDto());
+        try
+        {
+            return Ok(model.GetProductsInCart(modelName, clientUsername).AsDto());
+        }
+        catch
+        {
+            return BadRequest("Failed to get models in cart");
+        }
     }
+
     [HttpPut("UpdateIsSales/{modelName}/{value}")]
     public void UpdateIsSales(string modelName, bool value)
     {

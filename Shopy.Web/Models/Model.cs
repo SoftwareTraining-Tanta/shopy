@@ -171,14 +171,14 @@ namespace Shopy.Web.Models
                 db.SaveChanges();
             }
         }
-        public List<Product> GetProductsInCart(string modelName)
+        public List<Product> GetProductsInCart(string modelName, string username)
         {
             using (ShopyCtx db = new())
             {
                 Model model = db.Models
                 .Include(m => m.Products)
                 .FirstOrDefault(m => m.Name == modelName);
-                return model.Products.Where(p => p.ClientUsername != null).ToList();
+                return model.Products.Where(p => p.ClientUsername == username).ToList();
             }
         }
         public void UpdateColor(string modelName, string value)
