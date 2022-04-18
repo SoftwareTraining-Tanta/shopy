@@ -53,7 +53,6 @@ export const cartSlice = createSlice({
       state.numberItems = action.payload 
     },  
     getCart: (state, action) => {
-      console.log(action.payload)
       state.numberItems += 1 
       state.list.push(action.payload)
       for (let i = 0; i < state.list.length; i++) {

@@ -20,19 +20,14 @@ export const Box = styled.div`
     }
 `
 export const ContainerImg = styled.div`
-    text-align: center;
+    height: 200px;
 `
 export const Image = styled.img`
-    width: 240px;
-    height: 240px; 
-    @media screen and (max-width: 768px){
-        width: 180px;
-        height: 180px;
-        margin-bottom: 8px;
+    max-width: 250px;
+    max-height: 200px;
+    @media screen and (max-width: 992px){
+        max-width: 200px;
     }
-    // @media screen and (max-width: 600px){
-    //     display:none;
-    // }
 `
 export const BoxProduct = styled.div`
     flex:1;

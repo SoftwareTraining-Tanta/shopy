@@ -13,7 +13,10 @@ function Home() {
              fetch(`https://localhost:5001/api/carts/InCart/${Username}`)
             .then(res=>res.json())
             .then(json=> json.filter((i)=>{
-                dispatch(getCart({model: i.model, clientUsername:i.clientUsername, rate: i.rate, count:1}))
+                fetch(`https://localhost:5001/api/models/Get/${i.model}`)
+                .then(res=>res.json())
+                .then(json=> dispatch(getCart({model: i.model, image: json.imagePath, clientUsername:i.clientUsername, rate: i.rate, count:1}))
+                )
             }))
         }
     },[])
