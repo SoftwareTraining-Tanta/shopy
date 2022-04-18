@@ -9,7 +9,7 @@ public class Smtp
     public static void SendMessage(string toEmail, string subject, string body)
     {
 
-        MailMessage message = new MailMessage(from, toEmail);
+        MailMessage message = new MailMessage(From, toEmail);
         message.Subject = subject;
         message.Body = body;
         message.BodyEncoding = Encoding.UTF8;
