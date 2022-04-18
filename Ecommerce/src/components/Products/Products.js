@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addProduct } from '../../redux/cartSlice'
 import { getProduct } from '../../redux/productSlice'
-import {Wrapper,Card, Image, Box, Title, Price, NavLink, Button, Buttons, Container} from '../Home/HomeStyle'
+import {Wrapper,Card, Image, Box, Title, Price, NavLink, Button, Buttons, Container, ImageContainer} from '../Home/HomeStyle'
 import {Head, SearchBox,SearchIcon, Search, FilterBox, ButtonFilter} from './productsStyle'
 function Products() {
 
@@ -73,7 +73,9 @@ function Products() {
                         }).map((i) => {
                                 return (
                                     <Card key={i.name}>
-                                        <Image src={i.imagePath} alt="Background"/>
+                                        <ImageContainer>
+                                            <Image src={i.imagePath} alt="Background"/>
+                                        </ImageContainer>
                                         <Box>
                                             <Title>{i.name}</Title>
                                             <Price><sup>$</sup>{i.price}</Price>

@@ -66,9 +66,6 @@ export const Card = styled.div`
 `
 export const ImageContainer = styled.div`
     height: 200px;
-    // @media screen and (max-width: 320px){
-    //     maheight: 200px;
-    // }
 `
 export const Image = styled.img`
     max-width: 250px;

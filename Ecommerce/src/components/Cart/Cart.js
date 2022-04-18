@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { buyProduct, deleteProduct, getCart } from '../../redux/cartSlice'
-import {Container,Card, Image, Box, Title, Price, NavLink, Button, Buttons} from '../Home/HomeStyle'
+import {Container,Card, Image, Box, Title, Price, NavLink, Button, Buttons, ImageContainer} from '../Home/HomeStyle'
 import {H2, Wrapper,style} from './CartStyle'
 
 function Cart() {
@@ -30,7 +30,9 @@ function Cart() {
             {list.length ? (list.map((i)=>{
                   return(
                       <Card key={Math.random()}>
-                            <Image src={i.image} alt="Background"/>
+                            <ImageContainer>
+                                <Image src={i.imagePath} alt="Background"/>
+                            </ImageContainer>
                             <Box>
                                 <Title>{i.model}</Title>
                                 <Price>{i.count > 1 && `${i.count} items`}</Price>
