@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addProduct, getCart } from '../../redux/cartSlice'
 import {  getProduct } from '../../redux/productSlice'
-import {Container, H2,Card, Image, Box, Title, Price, NavLink, Button, ShowMore, Buttons, Wrapper} from './HomeStyle'
+import {Container, H2,Card, Image, Box, Title, Price, NavLink, Button, ShowMore, Buttons, Wrapper, ImageContainer} from './HomeStyle'
 import Slider from '../Slider/Slider'
 import { useParams } from 'react-router-dom'
 
@@ -65,8 +65,10 @@ function Home() {
                 <Wrapper>
                     {someData.length ? (someData.map((i) => {
                         return (
-                            <Card key={i.id}>
-                                <Image src={i.imagePath} alt="Background"/>
+                            <Card key={Math.random()}>
+                                <ImageContainer>
+                                    <Image src={i.imagePath} alt="Background"/>
+                                </ImageContainer>
                                 <Box>
                                     <Title>{i.name}</Title>
                                     <Price><sup>$</sup>{i.price}</Price>
