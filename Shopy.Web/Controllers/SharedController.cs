@@ -9,7 +9,7 @@ public class SharedController : ControllerBase
     {
         try
         {
-            Smtp.SendMessage(email, "from : " + email, name + "\n" + message);
+            Smtp.SendMessage(Smtp.From, "from : " + email, name + "\n" + message);
             return Ok("Message Sent");
         }
         catch (Exception ex)
