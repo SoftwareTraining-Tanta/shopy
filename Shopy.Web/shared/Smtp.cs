@@ -4,7 +4,7 @@ using System.Text;
 namespace Shopy.Web.Shared;
 public class Smtp
 {
-    const string from = "shopy.technical@gmail.com";
+    public const string from = "shopy.technical@gmail.com";
 
     public static void SendMessage(string toEmail, string subject, string body)
     {
