@@ -31,7 +31,7 @@ function Cart() {
                   return(
                       <Card key={Math.random()}>
                             <ImageContainer>
-                                <Image src={i.imagePath} alt="Background"/>
+                                <Image src={i.image} alt="Background"/>
                             </ImageContainer>
                             <Box>
                                 <Title>{i.model}</Title>
