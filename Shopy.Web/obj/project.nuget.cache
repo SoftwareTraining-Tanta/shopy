@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "JHbnztaG8ExcTN8594Wtt4TUnJjptLvjS/RF3cEoAK4y222xbPwNRh4v7xr7upsU63IZI8nRdrct8y8cB4LHnQ==",
+  "dgSpecHash": "WgSuHWEocvkhI3ih9/xcS6CAbKSpBd7Ctr+ca4PZpiUR3vxNjB8U3MW4G6Dtm5OQ/0biPUytT7bFOqL0NVvKEQ==",
   "success": true,
-  "projectFilePath": "/home/mab/Desktop/SoftwareProject/shopy/Shopy.Web/Shopy.Web.csproj",
+  "projectFilePath": "/home/mab/Desktop/shopy/Shopy.Web/Shopy.Web.csproj",
   "expectedPackageFiles": [
     "/home/mab/.nuget/packages/humanizer.core/2.8.26/humanizer.core.2.8.26.nupkg.sha512",
     "/home/mab/.nuget/packages/microsoft.codeanalysis.analyzers/3.0.0/microsoft.codeanalysis.analyzers.3.0.0.nupkg.sha512",
