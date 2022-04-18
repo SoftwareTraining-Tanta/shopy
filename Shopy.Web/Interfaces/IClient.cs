@@ -10,5 +10,6 @@ public interface IClient
     void UpdateVerificationCode(Client client, string verificationCode);
     List<Client> AllClients(int limit);
     List<Product> ClientProducts(string Username); // previously bought products
+    List<Product> ClientHistory(string Username);
 
 }

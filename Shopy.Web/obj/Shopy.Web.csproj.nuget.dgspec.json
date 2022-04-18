@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/mab/Desktop/SoftwareProject/shopy/Shopy.Web/Shopy.Web.csproj": {}
+    "/home/mab/Desktop/shopy/Shopy.Web/Shopy.Web.csproj": {}
   },
   "projects": {
-    "/home/mab/Desktop/SoftwareProject/shopy/Shopy.Web/Shopy.Web.csproj": {
+    "/home/mab/Desktop/shopy/Shopy.Web/Shopy.Web.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/mab/Desktop/SoftwareProject/shopy/Shopy.Web/Shopy.Web.csproj",
+        "projectUniqueName": "/home/mab/Desktop/shopy/Shopy.Web/Shopy.Web.csproj",
         "projectName": "Shopy.Web",
-        "projectPath": "/home/mab/Desktop/SoftwareProject/shopy/Shopy.Web/Shopy.Web.csproj",
+        "projectPath": "/home/mab/Desktop/shopy/Shopy.Web/Shopy.Web.csproj",
         "packagesPath": "/home/mab/.nuget/packages/",
-        "outputPath": "/home/mab/Desktop/SoftwareProject/shopy/Shopy.Web/obj/",
+        "outputPath": "/home/mab/Desktop/shopy/Shopy.Web/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/mab/.nuget/NuGet/NuGet.Config"

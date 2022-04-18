@@ -201,6 +201,11 @@ public partial class Client : IClient
 
     public void UpdatePassword(string username, string new_password)
     {
-        throw new NotImplementedException();
+        using (ShopyCtx db = new())
+        {
+            var client = db.Clients.FirstOrDefault(c => c.Username == username);
+            if (client != null) client.Password = new_password.ToSha256();
+            db.SaveChanges();
+        }
     }
 }
