@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "E:\\my_future\\Projects\\shopy\\Shopy.Web\\Shopy.Web.csproj": {}
+    "/home/mab/Desktop/shopy/Shopy.Web/Shopy.Web.csproj": {}
   },
   "projects": {
-    "E:\\my_future\\Projects\\shopy\\Shopy.Web\\Shopy.Web.csproj": {
+    "/home/mab/Desktop/shopy/Shopy.Web/Shopy.Web.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\my_future\\Projects\\shopy\\Shopy.Web\\Shopy.Web.csproj",
+        "projectUniqueName": "/home/mab/Desktop/shopy/Shopy.Web/Shopy.Web.csproj",
         "projectName": "Shopy.Web",
-        "projectPath": "E:\\my_future\\Projects\\shopy\\Shopy.Web\\Shopy.Web.csproj",
-        "packagesPath": "C:\\Users\\EL HARAMAIN\\.nuget\\packages\\",
-        "outputPath": "E:\\my_future\\Projects\\shopy\\Shopy.Web\\obj\\",
+        "projectPath": "/home/mab/Desktop/shopy/Shopy.Web/Shopy.Web.csproj",
+        "packagesPath": "/home/mab/.nuget/packages/",
+        "outputPath": "/home/mab/Desktop/shopy/Shopy.Web/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\EL HARAMAIN\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/home/mab/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -92,7 +92,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/6.0.201/RuntimeIdentifierGraph.json"
         }
       }
     }

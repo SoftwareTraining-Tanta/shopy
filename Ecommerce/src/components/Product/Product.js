@@ -47,7 +47,7 @@ function Product() {
             <BoxProduct>
               <Item><b>the category : </b>{Data.category}</Item>
               <Item><b>the title : </b>{Data.name}</Item>
-              <Item><b>the rate : </b>{Data.rate && Data.rate} from 5</Item>
+              <Item><b>the rate : </b>{Data.rate ? Data.rate : 0} from 5</Item>
               <Item><b>the price : </b><sup>$</sup>{Data.price}</Item>
               <Item><b>the description : </b>{Data.features}</Item>
               <Item>{sessionStorage.getItem('soldout') == Data.name && responseRequest}</Item>
