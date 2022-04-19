@@ -98,8 +98,8 @@ public class ClientController : ControllerBase
         }
         Client Client = new();
 
-        Client.Add(client);
         Client.UpdateVerificationCode(client, VerificationCode);
+        Client.Add(client);
         return Ok(VerificationCode);
 
     }

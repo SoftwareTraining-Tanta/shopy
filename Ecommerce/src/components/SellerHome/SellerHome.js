@@ -26,8 +26,8 @@ function SellerHome() {
         transform: 'translate(-50%, -50%)'
     }}>
             <span style={{fontSize: '25px', marginRight:'10px'}}>Loading</span>
-            <div class="spinner-border" role="status">
-                <span class="sr-only">Loading...</span>
+            <div className="spinner-border" role="status">
+                <span className="sr-only">Loading...</span>
            </div>
     </div>
   return (
@@ -35,9 +35,9 @@ function SellerHome() {
         <Dashboard/>
         <ContainerWrapper>
             <Wrapper>
-                        {Data.length ? (Data.map((i) => {
+                        {Data.length ? (Data.map((i, index) => {
                             return (
-                                <Card key={Math.random()}>
+                                <Card key={index}>
                                     <ImageContainer>
                                         <Image src={i.imagePath} alt="Background"/>
                                     </ImageContainer>

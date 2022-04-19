@@ -6,11 +6,16 @@ import { ArrowLeftOutlined, ArrowRightOutlined } from "@material-ui/icons";
 
 
 const Slider = () => {
+  const getData = async () => {
+    const res = await fetch(`https://localhost:5001/api/models/GetAllOrderdBySale/4`)
+    const data = await res.json()
+    setSomesomeData(data)
+  }
+  
+  
   const[somesomeData, setSomesomeData] = useState([])
     useEffect(()=>{
-        fetch(`https://localhost:5001/api/models/GetAllOrderdBySale/4`)
-        .then(res=>res.json())
-        .then(json=>setSomesomeData(json)) 
+        getData()
     },[])
     
   const [slideIndex, setSlideIndex] = useState(0);
@@ -34,7 +39,7 @@ const Slider = () => {
                   return i
                 }
               }).map((item) => (
-                <Slide bg={item.bg} key={item.id}>
+                <Slide bg={item.bg} key={item.name}>
                   <H1>Sales For {Math.floor(((100 - ((item.salePrice / item.price) * 100))))}%</H1>
                   {/* <H1>1Sales For ${item.sale}</H1> */}
                   <ImgContainer>

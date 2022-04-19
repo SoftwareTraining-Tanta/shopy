@@ -47,8 +47,8 @@ function Home() {
         transform: 'translate(-50%, -50%)'
     }}>
             <span style={{fontSize: '25px', marginRight:'10px'}}>Loading</span>
-            <div class="spinner-border" role="status">
-                <span class="sr-only">Loading...</span>
+            <div className="spinner-border" role="status">
+                <span className="sr-only">Loading...</span>
            </div>
     </div>
     useEffect(()=>{
@@ -66,9 +66,9 @@ function Home() {
             <Container style ={style}>
                 {someData.length ?<H2>Some of products</H2>:null}
                 <Wrapper>
-                    {someData.length ? (someData.map((i) => {
+                    {someData.length ? (someData.map((i, index) => {
                         return (
-                            <Card key={Math.random()}>
+                            <Card key={index}>
                                 <ImageContainer>
                                     <Image src={i.imagePath} alt="Background"/>
                                 </ImageContainer>

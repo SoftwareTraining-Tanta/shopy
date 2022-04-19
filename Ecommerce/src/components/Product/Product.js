@@ -26,8 +26,8 @@ function Product() {
       transform: 'translate(-50%, -50%)'
   }}>
           <span style={{fontSize: '25px', marginRight:'10px'}}>Loading</span>
-          <div class="spinner-border" role="status">
-              <span class="sr-only">Loading...</span>
+          <div className="spinner-border" role="status">
+              <span className="sr-only">Loading...</span>
          </div>
   </div>
   useEffect(()=>{

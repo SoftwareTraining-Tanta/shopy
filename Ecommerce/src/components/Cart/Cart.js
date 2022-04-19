@@ -11,7 +11,7 @@ function Cart() {
     let {list} = useSelector((state)=> state.cart)
     useEffect(()=>{
         if (Username && list.length == 0) {
-             fetch(`https://localhost:5001/api/carts/InCart/${Username}`)
+            fetch(`https://localhost:5001/api/carts/InCart/${Username}`)
             .then(res=>res.json())
             .then(json=> json.filter((i)=>{
                 fetch(`https://localhost:5001/api/models/Get/${i.model}`)
@@ -27,9 +27,9 @@ function Cart() {
           <H2>Your Products</H2>
           {list.length ? <Button onClick={()=>dispatch(buyProduct(Username))}>Checkout All</Button> : null}
           <Wrapper >
-            {list.length ? (list.map((i)=>{
+            {list.length ? (list.map((i, index)=>{
                   return(
-                      <Card key={Math.random()}>
+                      <Card key={index}>
                             <ImageContainer>
                                 <Image src={i.image} alt="Background"/>
                             </ImageContainer>

@@ -15,6 +15,7 @@ function AddProduct() {
     const dispatch = useDispatch()
     const [Data, setData] = useState([])
     const username = sessionStorage.getItem('signSeller')
+    
     useEffect(()=>{
         fetch(`https://localhost:5001/api/Vendors/vendorModels/${username}`)
         .then(response=>response.json())
@@ -47,9 +48,9 @@ function AddProduct() {
                             else if (i.name.toLowerCase().includes(name.toLowerCase())) {
                                 return i
                             }
-                        }).map((j)=>{
+                        }).map((j, index)=>{
                             return(
-                                <Option key={Math.random()}>
+                                <Option key={index}>
                                     <ValueOption>{j.name}</ValueOption>
                                     <SelectIcon onClick={()=>{setName(j.name)}}/>
                                 </Option>
