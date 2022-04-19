@@ -26,8 +26,8 @@ function Product() {
       transform: 'translate(-50%, -50%)'
   }}>
           <span style={{fontSize: '25px', marginRight:'10px'}}>Loading</span>
-          <div className="spinner-border" role="status">
-              <span className="sr-only">Loading...</span>
+          <div class="spinner-border" role="status">
+              <span class="sr-only">Loading...</span>
          </div>
   </div>
   useEffect(()=>{
@@ -47,7 +47,7 @@ function Product() {
             <BoxProduct>
               <Item><b>the category : </b>{Data.category}</Item>
               <Item><b>the title : </b>{Data.name}</Item>
-              <Item><b>the rate : </b>{Data.rate && Data.rate} from 5</Item>
+              <Item><b>the rate : </b>{Data.rate ? Data.rate : 0} from 5</Item>
               <Item><b>the price : </b><sup>$</sup>{Data.price}</Item>
               <Item><b>the description : </b>{Data.features}</Item>
               <Item>{sessionStorage.getItem('soldout') == Data.name && responseRequest}</Item>
