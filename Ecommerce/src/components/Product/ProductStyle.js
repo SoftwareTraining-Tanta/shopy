@@ -9,9 +9,7 @@ export const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    @media screen and (max-width: 768px){
-        padding: 10px 0px;
-    }
+    padding: 10px 0px;
 `
 export const Box = styled.div`
     display: flex;
@@ -20,6 +18,7 @@ export const Box = styled.div`
     }
 `
 export const ContainerImg = styled.div`
+    margin: auto;
     height: 200px;
 `
 export const Image = styled.img`

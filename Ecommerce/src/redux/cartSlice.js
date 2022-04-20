@@ -40,6 +40,7 @@ export const cartSlice = createSlice({
         })
         .then(res=>res.json())
         .then(json=>console.log(json))
+        state.numberItems -= 1
         state.list.filter((i)=>{
           if (action.payload.model == i.model) {
               i.count -= 1

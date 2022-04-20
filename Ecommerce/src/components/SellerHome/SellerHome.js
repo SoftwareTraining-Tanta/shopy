@@ -35,7 +35,7 @@ function SellerHome() {
         <Dashboard/>
         <ContainerWrapper>
             <Wrapper>
-                        {Data.length ? (Data.map((i) => {
+                        {Data.map((i) => {
                             return (
                                 <Card key={Math.random()}>
                                     <ImageContainer>
@@ -47,7 +47,7 @@ function SellerHome() {
                                     </Box>
                                 </Card>
                             )   
-                        })) : Loading }
+                        })}
             </Wrapper>
         </ContainerWrapper>
     </Container>
