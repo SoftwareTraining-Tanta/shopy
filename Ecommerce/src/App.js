@@ -19,6 +19,7 @@ import AddProduct from './components/AddProduct/AddProduct';
 import AddNewProduct from './components/AddNewProduct/AddNewProduct';
 import Confirmation from './components/Confirmation/Confirmation';
 import ConfirmationSeller from './components/ConfirmationSeller/ConfirmationSeller';
+import HistoryOrders from './components/HistoryOrders/HistoryOrders';
 function App() {
   return (
     <div className="App">
@@ -43,6 +44,7 @@ function App() {
             <Route exact path='/addnewproduct' element={< AddNewProduct />}></Route>
             <Route exact path='/confirm' element={< Confirmation />}></Route>
             <Route exact path='/confirmseller' element={< ConfirmationSeller />}></Route>
+            <Route exact path='/history' element={< HistoryOrders />}></Route>
         </Routes>
         <Footer />
       </Router>     

@@ -63,7 +63,11 @@ function Products() {
                     </FilterBox>
                 </Head> 
                 : null}
+                <div className='row w-100 mt-3 d-flex justify-content-end'>
+                    <NavLink style={{width:'25%'}} to='/history' type="button" class="btn btn-primary w-25 me-5">History of orders</NavLink>
+                </div>    
             <Wrapper>
+
             {show.length ? (show.filter((i) => {
                             if (searchTerm == '') {
                                 return i
